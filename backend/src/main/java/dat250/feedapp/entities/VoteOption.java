@@ -1,5 +1,6 @@
 package dat250.feedapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,17 +11,20 @@ import java.util.UUID;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+public class VoteOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @NonNull
-    private String username;
+    private String caption;
     @NonNull
-    private String email;
-    @NonNull
-    private String password;
+    private Integer presentationOrder;
+
+    @ManyToOne
+    @JoinColumn(name = "poll")
+    @JsonBackReference
+    private Poll poll;
 
 }
