@@ -34,10 +34,6 @@ dependencies {
 
     runtimeOnly("com.h2database:h2")
 
-    //
-    implementation("org.hibernate.orm:hibernate-core:7.1.1.Final")
-    implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
-    //
 
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")

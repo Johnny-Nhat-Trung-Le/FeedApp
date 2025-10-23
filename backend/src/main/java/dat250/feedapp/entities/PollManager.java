@@ -44,15 +44,18 @@ public class PollManager {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void createPoll(PollDTO pollDTO) {
         Poll poll = pollDTO.getPoll();
+        Poll createdPoll = pollRepository.save(poll);
         List<VoteOption> voteOptions = pollDTO.getVoteOptions();
+        for (VoteOption vo : voteOptions) {
+            vo.setPollId(createdPoll.getId());
+        }
         voteOptionRepository.saveAll(voteOptions);
-        pollRepository.save(poll);
     }
 
-
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public boolean deletePoll(UUID id) {
-        pollRepository.deleteById(id);
         voteOptionRepository.deleteVoteOptions(id);
+        pollRepository.deleteById(id);
         return !(pollRepository.existsById(id));
     }
 

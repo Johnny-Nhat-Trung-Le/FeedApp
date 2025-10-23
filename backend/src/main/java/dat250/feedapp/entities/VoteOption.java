@@ -1,9 +1,11 @@
 package dat250.feedapp.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -25,14 +27,13 @@ public class VoteOption {
     @NotNull
     private Integer presentationOrder;
 
-    @ManyToOne
-    @JoinColumn(name = "poll")
-    @JsonBackReference
-    private Poll poll;
+    @NotNull
+    private UUID pollId;
 
-    public VoteOption(String caption, Integer presentationOrder, Poll poll) {
+    public VoteOption(String caption, Integer presentationOrder) {
         this.caption = caption;
         this.presentationOrder = presentationOrder;
 
     }
+
 }

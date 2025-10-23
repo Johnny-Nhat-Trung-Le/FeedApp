@@ -31,7 +31,7 @@ public class PollController {
             return ResponseEntity.badRequest().build();
         }
 
-        if(this.pollManager.findUser(pollDTO.getPoll().getCreator().getId()) != null) {
+        if (this.pollManager.findUser(pollDTO.getPoll().getCreator().getId()) != null) {
             try {
                 this.pollManager.createPoll(pollDTO);
                 System.out.println("POLLLLL underherherherhehrherehrhrhhrrerr");
