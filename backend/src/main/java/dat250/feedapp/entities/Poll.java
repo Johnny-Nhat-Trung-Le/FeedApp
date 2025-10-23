@@ -1,7 +1,11 @@
 package dat250.feedapp.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -9,7 +13,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 public class Poll {
 
@@ -17,16 +20,23 @@ public class Poll {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NonNull
+    @NotNull
+    @NotEmpty
     private String question;
-    @NonNull
+    @NotNull
     private Instant publishedAt;
-    @NonNull
+    @NotNull
     private Instant ValidUntil;
 
-    @NonNull
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "creator")
     private User creator;
 
+    public Poll(String question, Instant publishedAt, Instant validUntil, User creator) {
+        this.question = question;
+        this.publishedAt = publishedAt;
+        ValidUntil = validUntil;
+        this.creator = creator;
+    }
 }
