@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
+    id("org.flywaydb.flyway") version "11.15.0"
 }
 
 group = "dat250"
@@ -30,7 +31,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
     implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok")
+
     runtimeOnly("com.h2database:h2")
+
+    //
+    implementation("org.hibernate.orm:hibernate-core:7.1.1.Final")
+    implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
+    //
+
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

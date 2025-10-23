@@ -17,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @ToString
+@Table(name = "polls")
 public class Poll {
 
     @Id
