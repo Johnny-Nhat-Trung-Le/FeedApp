@@ -30,8 +30,9 @@ public class VoteOption {
     @JsonBackReference
     private Poll poll;
 
-    public VoteOption(String caption, Integer presentationOrder) {
+    public VoteOption(String caption, Integer presentationOrder, Poll poll) {
         this.caption = caption;
         this.presentationOrder = presentationOrder;
+
     }
 }
