@@ -37,6 +37,7 @@ dependencies {
     testImplementation("org.springframework.amqp:spring-rabbit-test")
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
 }
 
 tasks.withType<Test> {

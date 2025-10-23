@@ -3,8 +3,10 @@ package dat250.feedapp.controllers;
 import dat250.feedapp.dto.UserDTO;
 import dat250.feedapp.entities.PollManager;
 import dat250.feedapp.entities.User;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,9 +30,11 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
         User createdUser = this.pollManager.createUser(user);
-
         if (createdUser != null) {
             UserDTO userDTO = UserDTO.builder()
                     .username(createdUser.getUsername())

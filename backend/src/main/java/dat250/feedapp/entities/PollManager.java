@@ -37,13 +37,8 @@ public class PollManager {
     }
 
     public User createUser(User user) {
-
-        if (isValidEmail(user.getEmail())) {
-            if (userRepo.findByEmail(user.getEmail()).isEmpty()) {
-                if (user.getUsername().length() > FIELDSIZE && user.getPassword().length() > FIELDSIZE) {
-                    return userRepo.save(user);
-                }
-            }
+        if (userRepo.findByEmail(user.getEmail()).isEmpty()) {
+            return userRepo.save(user);
         }
         return null;
 
