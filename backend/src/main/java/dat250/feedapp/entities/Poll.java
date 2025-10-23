@@ -1,11 +1,13 @@
 package dat250.feedapp.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -14,6 +16,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
+@ToString
 public class Poll {
 
     @Id
@@ -23,20 +26,22 @@ public class Poll {
     @NotNull
     @NotEmpty
     private String question;
-    @NotNull
+
     private Instant publishedAt;
+
     @NotNull
-    private Instant ValidUntil;
+    @Future
+    private Instant validUntil;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "creator")
     private User creator;
 
-    public Poll(String question, Instant publishedAt, Instant validUntil, User creator) {
+    public Poll(String question, Instant validUntil, User creator) {
         this.question = question;
-        this.publishedAt = publishedAt;
-        ValidUntil = validUntil;
+        this.publishedAt = Instant.now();
+        this.validUntil = validUntil;
         this.creator = creator;
     }
 }

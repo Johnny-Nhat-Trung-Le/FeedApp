@@ -22,13 +22,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @NotNull
     @Size(min = 3)
     private String username;
+
     @NotNull
     @Size(min = 3)
     @Email
     private String email;
+
     @NotNull
     @Size(min = 3)
     private String password;

@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Service
 public class PollManager {
+
     @Autowired
     private UserRepository userRepo;
 
@@ -22,6 +23,5 @@ public class PollManager {
             return userRepo.save(user);
         }
         return null;
-
     }
 }
