@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,7 +47,12 @@ public class PollManager {
         return pollOpt.orElse(null);
     }
 
+    public Iterable<Poll> findPolls() {
+        return pollRepository.findAll();
+    }
+
     public Poll createPoll(Poll poll) {
+        poll.setPublishedAt(Instant.now());
         return pollRepository.save(poll);
     }
 
@@ -54,4 +60,6 @@ public class PollManager {
         pollRepository.deleteById(id);
         return !pollRepository.existsById(id);
     }
+
+
 }

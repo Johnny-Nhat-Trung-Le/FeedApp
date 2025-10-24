@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin
@@ -71,6 +72,12 @@ public class PollController {
     }
 
     //Get Polls()
+    @GetMapping
+    public ResponseEntity<Iterable<Poll>> getPolls(){
+        Iterable<Poll> polls = this.pollManager.findPolls();
+        return ResponseEntity.ok(polls);
+    }
+
     //Create Vote (@Pathvariable PollId, @RequestBody  Vote)
     //Update Vote (@Pathvariable PollId, @RequestBody Vote, (userId?))
 }
