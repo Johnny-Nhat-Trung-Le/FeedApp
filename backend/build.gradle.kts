@@ -2,7 +2,6 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
-    id("org.flywaydb.flyway") version "11.15.0"
 }
 
 group = "dat250"
@@ -32,8 +31,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok")
 
-    runtimeOnly("com.h2database:h2")
+    implementation ("org.springframework.boot:spring-boot-starter-validation")
+    implementation ("org.flywaydb:flyway-core")
 
+    runtimeOnly("com.h2database:h2")
 
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")

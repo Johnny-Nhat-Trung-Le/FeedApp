@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @ToString
+@Table(name = "votes")
 public class Vote {
 
     @Id

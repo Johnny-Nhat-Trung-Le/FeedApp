@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @ToString
-@Table(name = "voteOptions")
+@Table(name = "vote_options")
 public class VoteOption {
 
     @Id
