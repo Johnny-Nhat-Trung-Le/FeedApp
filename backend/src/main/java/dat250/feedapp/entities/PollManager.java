@@ -41,23 +41,17 @@ public class PollManager {
         return null;
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void createPoll(PollDTO pollDTO) {
-        Poll poll = pollDTO.getPoll();
-        Poll createdPoll = pollRepository.save(poll);
-        List<VoteOption> voteOptions = pollDTO.getVoteOptions();
-        for (VoteOption vo : voteOptions) {
-            vo.setPollId(createdPoll.getId());
-        }
-        voteOptionRepository.saveAll(voteOptions);
+    public Poll findPoll(UUID id) {
+        Optional<Poll> pollOpt = pollRepository.findById(id);
+        return pollOpt.orElse(null);
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public Poll createPoll(Poll poll) {
+        return pollRepository.save(poll);
+    }
+
     public boolean deletePoll(UUID id) {
-        voteOptionRepository.deleteVoteOptions(id);
         pollRepository.deleteById(id);
-        return !(pollRepository.existsById(id));
+        return !pollRepository.existsById(id);
     }
-
-
 }

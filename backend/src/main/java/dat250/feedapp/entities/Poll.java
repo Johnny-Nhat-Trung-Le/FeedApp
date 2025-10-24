@@ -1,5 +1,6 @@
 package dat250.feedapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,6 +11,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -38,6 +41,10 @@ public class Poll {
     @ManyToOne
     @JoinColumn(name = "creator")
     private User creator;
+
+    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<VoteOption> options;
 
     public Poll(String question, Instant validUntil, User creator) {
         this.question = question;

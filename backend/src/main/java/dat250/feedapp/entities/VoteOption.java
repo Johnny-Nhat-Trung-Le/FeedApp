@@ -1,5 +1,6 @@
 package dat250.feedapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -27,13 +28,12 @@ public class VoteOption {
     @NotNull
     private Integer presentationOrder;
 
-    @NotNull
-    private UUID pollId;
+    @ManyToOne
+    @JsonBackReference
+    private Poll poll;
 
     public VoteOption(String caption, Integer presentationOrder) {
         this.caption = caption;
         this.presentationOrder = presentationOrder;
-
     }
-
 }
