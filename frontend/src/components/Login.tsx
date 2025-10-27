@@ -1,7 +1,7 @@
 import {useForm, type SubmitHandler} from "react-hook-form"
 import {Link} from "react-router-dom";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {loginSchema} from "./Schema.tsx";
+import {loginSchema} from "./validation/Schema.tsx";
 
 interface LoginType{
     username: string,
