@@ -12,7 +12,6 @@ function App() {
     return (
         <>
             <BrowserRouter>
-                {/*<div className={"h-[calc(100vh-40px)]"}></div>*/}
                 <div className={"flex flex-col min-h-screen"}>
                     <Container>
                         <Navbar />
