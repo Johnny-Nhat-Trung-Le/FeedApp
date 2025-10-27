@@ -1,5 +1,8 @@
 package dat250.feedapp.entities;
 
+import dat250.feedapp.messager.PollBrokerManager;
+import dat250.feedapp.messager.PollEventListener;
+import dat250.feedapp.messager.PollEventPublisher;
 import dat250.feedapp.repositories.PollRepository;
 import dat250.feedapp.repositories.UserRepository;
 import dat250.feedapp.repositories.VoteOptionRepository;
@@ -26,6 +29,15 @@ public class PollManager {
     @Autowired
     private VoteOptionRepository voteOptionRepository;
 
+    @Autowired
+    private PollBrokerManager pollBrokerManager;
+
+    @Autowired
+    private PollEventListener pollEventListener;
+
+    @Autowired
+    private PollEventPublisher pollEventPublisher;
+
     public User findUser(UUID id) {
         Optional<User> userOpt = userRepository.findById(id);
         return userOpt.orElse(null);
@@ -49,7 +61,10 @@ public class PollManager {
 
     public Poll createPoll(Poll poll) {
         poll.setPublishedAt(Instant.now());
-        return pollRepository.save(poll);
+        pollRepository.save(poll);
+        pollBrokerManager.registerQueue(poll.getId());
+        pollEventListener.registerListener(poll.getId());
+        return poll;
     }
 
     public boolean deletePoll(UUID id) {
@@ -61,7 +76,9 @@ public class PollManager {
     public Vote createVote(UUID pollId, Vote vote) {
         if (pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
             vote.setPublishedAt(Instant.now());
-            return voteRepository.save(vote);
+            voteRepository.save(vote);
+            pollEventPublisher.publishVote(pollId, vote);
+            return vote;
         }
         return null;
     }

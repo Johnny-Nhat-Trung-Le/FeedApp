@@ -3,6 +3,7 @@ package dat250.feedapp.controllers;
 import dat250.feedapp.entities.Poll;
 import dat250.feedapp.entities.PollManager;
 import dat250.feedapp.entities.Vote;
+import dat250.feedapp.messager.PollEventPublisher;
 import dat250.feedapp.repositories.VoteOptionRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +31,13 @@ public class PollController {
     public ResponseEntity<Poll> createPoll(@Valid @RequestBody Poll poll, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
+            System.out.println("error is here");
+            System.out.println(bindingResult.getAllErrors());
             return ResponseEntity.badRequest().build();
         }
 
         if (this.pollManager.findUser(poll.getCreator().getId()) != null) {
             Poll createdPoll = this.pollManager.createPoll(poll);
-            System.out.println("POLLLLL underherherherhehrherehrhrhhrrerr");
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
