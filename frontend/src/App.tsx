@@ -5,12 +5,15 @@ import Navbar from "./components/navbar/Navbar.tsx";
 import Polls from "./components/Polls.tsx";
 import Register from "./components/Register.tsx";
 import Login from "./components/Login.tsx";
+import Container from "./utils/Container.tsx";
 
 function App() {
     return (
         <>
             <BrowserRouter>
-                <Navbar />
+                <Container>
+                    <Navbar />
+                </Container>
                 <Routes>
                     <Route path={"/"} element={<Home/>}/>
                     <Route path={"/polls"} element={<Polls/>}/>
