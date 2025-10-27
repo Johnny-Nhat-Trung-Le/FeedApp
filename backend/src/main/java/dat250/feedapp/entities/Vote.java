@@ -1,8 +1,12 @@
 package dat250.feedapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -19,17 +23,14 @@ public class Vote {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotNull
-    private UUID voteOptionId;
-
     private Instant publishedAt;
 
     @NotNull
     private UUID userId;
 
-    public Vote(UUID voteOptionId, UUID userId) {
-        this.userId = userId;
-        this.voteOptionId = voteOptionId;
-        this.publishedAt = Instant.now();
-    }
+    @NotNull
+    @ManyToOne
+    @JsonBackReference
+    private VoteOption voteOption;
+
 }

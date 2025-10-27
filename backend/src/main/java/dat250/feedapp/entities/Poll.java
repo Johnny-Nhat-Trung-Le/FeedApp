@@ -48,7 +48,6 @@ public class Poll {
 
     public Poll(String question, Instant validUntil, User creator) {
         this.question = question;
-        this.publishedAt = Instant.now();
         this.validUntil = validUntil;
         this.creator = creator;
     }

@@ -1,17 +1,13 @@
 package dat250.feedapp.entities;
 
-import dat250.feedapp.dto.PollDTO;
 import dat250.feedapp.repositories.PollRepository;
 import dat250.feedapp.repositories.UserRepository;
 import dat250.feedapp.repositories.VoteOptionRepository;
 import dat250.feedapp.repositories.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,4 +58,11 @@ public class PollManager {
     }
 
 
+    public Vote createVote(UUID pollId, Vote vote) {
+        if (pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
+            vote.setPublishedAt(Instant.now());
+            return voteRepository.save(vote);
+        }
+        return null;
+    }
 }

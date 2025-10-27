@@ -1,20 +1,17 @@
 package dat250.feedapp.controllers;
 
-import dat250.feedapp.dto.PollDTO;
 import dat250.feedapp.entities.Poll;
 import dat250.feedapp.entities.PollManager;
-import dat250.feedapp.entities.User;
+import dat250.feedapp.entities.Vote;
 import dat250.feedapp.repositories.VoteOptionRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin
@@ -37,20 +34,21 @@ public class PollController {
         }
 
         if (this.pollManager.findUser(poll.getCreator().getId()) != null) {
-                Poll createdPoll = this.pollManager.createPoll(poll);
-                System.out.println("POLLLLL underherherherhehrherehrhrhhrrerr");
+            Poll createdPoll = this.pollManager.createPoll(poll);
+            System.out.println("POLLLLL underherherherhehrherehrhrhhrrerr");
 
-                URI location = ServletUriComponentsBuilder
-                        .fromCurrentRequest()
-                        .path("/{id}")
-                        .buildAndExpand(createdPoll.getId())
-                        .toUri();
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(createdPoll.getId())
+                    .toUri();
 
-                return ResponseEntity.created(location).build();
+            return ResponseEntity.created(location).build();
         }
         return ResponseEntity.badRequest().build();
     }
 
+    //Delete poll (Pathvariable id) Husk sjekk at det er creator som får lov til å slette
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePoll(@PathVariable UUID id) {
         if (this.pollManager.deletePoll(id)) {
@@ -60,10 +58,8 @@ public class PollController {
         return ResponseEntity.badRequest().build();
     }
 
-    //Delete poll (Pathvariable id) Husk sjekk at det er creator som får lov til å slette
-
     @GetMapping("/{pollId}")
-    public ResponseEntity<Poll> getPoll(@PathVariable UUID pollId){
+    public ResponseEntity<Poll> getPoll(@PathVariable UUID pollId) {
         Poll poll = this.pollManager.findPoll(pollId);
         if (poll != null) {
             return ResponseEntity.ok(poll);
@@ -71,13 +67,40 @@ public class PollController {
         return ResponseEntity.notFound().build();
     }
 
-    //Get Polls()
     @GetMapping
-    public ResponseEntity<Iterable<Poll>> getPolls(){
+    public ResponseEntity<Iterable<Poll>> getPolls() {
         Iterable<Poll> polls = this.pollManager.findPolls();
         return ResponseEntity.ok(polls);
     }
 
-    //Create Vote (@Pathvariable PollId, @RequestBody  Vote)
-    //Update Vote (@Pathvariable PollId, @RequestBody Vote, (userId?))
+    @PostMapping("/{pollId}")
+    public ResponseEntity<Vote> createVote(@PathVariable UUID pollId, @RequestBody Vote vote, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Vote createdVote = this.pollManager.createVote(pollId, vote);
+        if (createdVote != null) {
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(createdVote.getId())
+                    .toUri();
+            return ResponseEntity.created(location).build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/{pollId}")
+    public ResponseEntity<Vote> updateVote(@PathVariable UUID pollId, @RequestBody Vote vote, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Vote updatedVote = this.pollManager.createVote(pollId, vote);
+        if (updatedVote != null) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
 }
