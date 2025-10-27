@@ -2,6 +2,7 @@ import {type SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {registerSchema} from "./validation/Schema.tsx";
 import {Link} from "react-router-dom";
+import Container from "./utils/Container.tsx";
 
 interface RegisterType{
     username: string,
@@ -20,7 +21,9 @@ export default function Register() {
 
     const onSubmit: SubmitHandler<RegisterType> = (data) => console.log(data);
 
-    return (<div className={"flex flex-col justify-center items-center my-10"}>
+    return (
+        <Container>
+        <div className={"flex flex-col justify-center items-center my-10"}>
             <h1 className={"mb-8 font-bold text-2xl"}>Register</h1>
             <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col gap-5 min-w-60"}>
                 <div className="flex flex-col gap-1">
@@ -50,5 +53,6 @@ export default function Register() {
                 </button>
             </form>
         </div>
+        </Container>
     )
 }

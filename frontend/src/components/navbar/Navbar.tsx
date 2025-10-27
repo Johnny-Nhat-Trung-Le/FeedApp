@@ -1,7 +1,7 @@
 import {NavLink} from "react-router-dom";
 
 export default function Navbar() {
-    return <nav aria-label="main navigation" className={"sticky top-2 flex items-center justify-between"}>
+    return <nav aria-label="main navigation" className={"sticky top-0 pt-3 flex items-center justify-between"}>
         <div>
             <NavLink to={"/"} className={"logo"}>
                 FeedApp

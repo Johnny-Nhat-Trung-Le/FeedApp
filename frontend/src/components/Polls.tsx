@@ -1,3 +1,6 @@
+import Container from "./utils/Container.tsx";
 export default function Polls() {
-    return <p>I am a poll :)</p>
+    return <Container>
+        <p>I am a poll :)</p>
+    </Container>
 }
