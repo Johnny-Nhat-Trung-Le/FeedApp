@@ -3,6 +3,8 @@
 @theme{
     --color-primary: #B034F7;
     --color-light-pink: #F2B5D4;
+    --color-gradient-light-purple: #CA6FFE;
+    --color-gradient-dark-purple: #671F91;
 }
 
 *, *::before, *::after {
