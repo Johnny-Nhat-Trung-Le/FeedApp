@@ -19,7 +19,7 @@ export default function Login() {
 
     const onSubmit: SubmitHandler<LoginType> = (data) => console.log(data);
 
-    return (<div className={"flex flex-col justify-center items-center h-[calc(100vh-65px)]"}>
+    return (<div className={"flex flex-col justify-center items-center my-10"}>
             <h1 className={"mb-8 font-bold text-2xl"}>Login</h1>
             <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col gap-5 min-w-60"}>
                 <div className="flex flex-col gap-1">
