@@ -1,5 +1,6 @@
 package dat250.feedapp.entities;
 
+import dat250.feedapp.securities.Roles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -8,8 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -17,7 +23,7 @@ import java.util.UUID;
 @Entity
 @ToString
 @Table(name = "USERS")
-public class User {
+public class User implements UserDetails,CredentialsContainer{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,10 +41,23 @@ public class User {
     @NotNull
     @Size(min = 3)
     private String password;
-
+    @Enumerated(EnumType.STRING)
+    private Roles role;
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = Roles.USER;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(this.role);
+    }
+
+
+    @Override
+    public void eraseCredentials() {
+        password=null;
     }
 }
