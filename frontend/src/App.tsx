@@ -16,12 +16,14 @@ function App() {
                 <Container>
                     <Navbar />
                 </Container>
+                <main className="grow">
                     <Routes>
                         <Route path={"/"} element={<Home/>}/>
                         <Route path={"/polls"} element={<Polls/>}/>
                         <Route path={"/register"} element={<Register/>} />
                         <Route path={"/login"} element={<Login/>}/>
                     </Routes>
+                </main>
                 <Footer/>
             </div>
             </BrowserRouter>

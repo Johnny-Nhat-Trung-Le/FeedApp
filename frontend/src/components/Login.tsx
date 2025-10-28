@@ -21,8 +21,7 @@ export default function Login() {
     const onSubmit: SubmitHandler<LoginType> = (data) => console.log(data);
 
     return (
-        <Container>
-            <div className={"flex flex-col justify-center items-center my-10"}>
+        <Container style={"flex flex-col justify-center items-center my-40"}>
                 <h1 className={"mb-5 font-bold text-2xl"}>Login</h1>
                 <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col gap-5 min-w-60"}>
                     <div className="flex flex-col gap-1">
@@ -44,7 +43,6 @@ export default function Login() {
                     <button type="submit" className={"py-2 px-4 rounded-sm m-auto self-start cursor-pointer bg-gradient-to-r from-gradient-light-purple to-gradient-dark-purple text-white hover:from-purple-300 hover:to-purple-700"}>Login
                     </button>
                 </form>
-            </div>
         </Container>
     )
 }
