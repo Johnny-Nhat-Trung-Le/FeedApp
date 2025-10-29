@@ -45,17 +45,6 @@ public class PollManager {
         return userOpt.orElse(null);
     }
 
-    public User createUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
-            //Encrypt the password before saving the user
-            String password = user.getPassword();
-            String encodedPassword = passwordEncoder.encode(password);
-            user.setPassword(encodedPassword);
-            return userRepository.save(user);
-        }
-        return null;
-    }
-
     public Poll findPoll(UUID id) {
         Optional<Poll> pollOpt = pollRepository.findById(id);
         return pollOpt.orElse(null);
@@ -85,14 +74,39 @@ public class PollManager {
     }
 
     //TODO maybe have separate service class for this?
+    public User createUser(User user) {
+        if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
+            //Encrypt the password before saving the user
+            String password = user.getPassword();
+            String encodedPassword = passwordEncoder.encode(password);
+            user.setPassword(encodedPassword);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    /**
+     * handle login of users
+     *
+     * @param username
+     * @param password
+     * @return a unique session token
+     */
     public String login(String username, String password) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+
+        //Specify what type of authentication token we want to use
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                username,
+                password
+        );
         //Authentication Object
         Authentication authentication = authManager.authenticate(token);
-        //Check that user and password is correct
+        //Check that user and password matches
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(username);
         }
         return null;
     }
+
+
 }
