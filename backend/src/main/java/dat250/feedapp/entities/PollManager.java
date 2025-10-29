@@ -4,7 +4,12 @@ import dat250.feedapp.repositories.PollRepository;
 import dat250.feedapp.repositories.UserRepository;
 import dat250.feedapp.repositories.VoteOptionRepository;
 import dat250.feedapp.repositories.VoteRepository;
+import dat250.feedapp.securities.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -26,6 +31,15 @@ public class PollManager {
     @Autowired
     private VoteOptionRepository voteOptionRepository;
 
+    @Autowired
+    private AuthenticationManager authManager;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JWTService jwtService;
+
     public User findUser(UUID id) {
         Optional<User> userOpt = userRepository.findById(id);
         return userOpt.orElse(null);
@@ -33,6 +47,10 @@ public class PollManager {
 
     public User createUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
+            //Encrypt the password before saving the user
+            String password = user.getPassword();
+            String encodedPassword = passwordEncoder.encode(password);
+            user.setPassword(encodedPassword);
             return userRepository.save(user);
         }
         return null;
@@ -62,6 +80,18 @@ public class PollManager {
         if (pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
             vote.setPublishedAt(Instant.now());
             return voteRepository.save(vote);
+        }
+        return null;
+    }
+
+    //TODO maybe have separate service class for this?
+    public String login(String username, String password) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+        //Authentication Object
+        Authentication authentication = authManager.authenticate(token);
+        //Check that user and password is correct
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(username);
         }
         return null;
     }

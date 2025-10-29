@@ -36,15 +36,8 @@ public class UserController {
         }
         User createdUser = this.pollManager.createUser(user);
         if (createdUser != null) {
-            UserDTO userDTO = UserDTO.builder()
-                    .username(createdUser.getUsername())
-                    .email(createdUser.getEmail())
-                    .build();
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(createdUser.getId())
-                    .toUri();
+            UserDTO userDTO = UserDTO.builder().username(createdUser.getUsername()).email(createdUser.getEmail()).build();
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdUser.getId()).toUri();
             //TODO remove after debug
             System.out.println(createdUser.getId());
             return ResponseEntity.created(location).body(userDTO);

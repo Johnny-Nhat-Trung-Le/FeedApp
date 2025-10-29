@@ -11,11 +11,12 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -23,7 +24,7 @@ import java.util.*;
 @Entity
 @ToString
 @Table(name = "USERS")
-public class User implements UserDetails,CredentialsContainer{
+public class User implements UserDetails, CredentialsContainer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -41,23 +42,24 @@ public class User implements UserDetails,CredentialsContainer{
     @NotNull
     @Size(min = 3)
     private String password;
+    //JPA calls noArgsConstructor thus have to initialize here TODO
     @Enumerated(EnumType.STRING)
-    private Roles role;
+    private Roles role = Roles.USER;
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role = Roles.USER;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(this.role);
+        return Collections.singletonList(new SimpleGrantedAuthority(this.role.name()));
     }
 
 
     @Override
     public void eraseCredentials() {
-        password=null;
+        password = null;
     }
 }

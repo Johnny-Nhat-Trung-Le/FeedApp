@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.UUID;
 
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/polls")
@@ -24,7 +25,6 @@ public class PollController {
 
     @Autowired
     private VoteOptionRepository voteOptionRepository;
-
 
     @PostMapping
     public ResponseEntity<Poll> createPoll(@Valid @RequestBody Poll poll, BindingResult bindingResult) {
