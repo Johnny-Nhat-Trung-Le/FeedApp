@@ -11,7 +11,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -51,4 +50,5 @@ public class Poll {
         this.validUntil = validUntil;
         this.creator = creator;
     }
+
 }
