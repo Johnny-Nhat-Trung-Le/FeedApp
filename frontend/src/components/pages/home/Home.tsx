@@ -1,6 +1,6 @@
-import Button from "../utils/Button.tsx";
+import Button from "../../common/utils/Button.tsx";
 import GetStarted from "./GetStarted.tsx";
-import Container from "../utils/Container.tsx";
+import Container from "../../common/utils/Container.tsx";
 
 export default function Home() {
     return <>

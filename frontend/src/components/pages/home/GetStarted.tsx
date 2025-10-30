@@ -1,4 +1,4 @@
-import Container from "../utils/Container.tsx";
+import Container from "../../common/utils/Container.tsx";
 
 export default function GetStarted() {
     return <section className="wavybox pt-50 pb-10 bg-gray-100">

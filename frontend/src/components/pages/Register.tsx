@@ -1,25 +1,36 @@
 import {type SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {registerSchema} from "./validation/Schema.tsx";
+import {registerSchema} from "../validation/Schema.tsx";
 import {Link} from "react-router-dom";
-import Container from "./utils/Container.tsx";
-
-interface RegisterType{
-    username: string,
-    password: string,
-    email: string,
-}
+import Container from "../common/utils/Container.tsx";
+import {useMutation} from "@tanstack/react-query";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import type {UserType} from "../interfaces/Types.tsx";
 
 export default function Register() {
     const {
         register,
         handleSubmit,
         formState: {errors}
-    } = useForm<RegisterType>({
+    } = useForm<UserType>({
         resolver: yupResolver(registerSchema),
     });
 
-    const onSubmit: SubmitHandler<RegisterType> = (data) => console.log(data);
+    const navigate = useNavigate();
+
+    const mutation = useMutation({
+        mutationFn: (formData: UserType) => {
+            return axios.post("http://localhost:8080/api/v1/users", formData)
+        },
+        onSuccess:  () => {
+            navigate(`/login`);
+        }
+    })
+
+    const onSubmit: SubmitHandler<UserType> = (formData) => {
+        mutation.mutate(formData);
+    }
 
     return (
         <Container style={"flex flex-col justify-center items-center my-30"}>

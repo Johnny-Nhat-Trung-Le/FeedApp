@@ -1,13 +1,13 @@
 import {useForm, type SubmitHandler} from "react-hook-form"
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {loginSchema} from "./validation/Schema.tsx";
-import Container from "./utils/Container.tsx";
-
-interface LoginType{
-    username: string,
-    password: string,
-}
+import {loginSchema} from "../validation/Schema.tsx";
+import Container from "../common/utils/Container.tsx";
+import {useContext} from "react";
+import {UserTokenContext} from "../../context/Context.tsx";
+import type {LoginType} from "../interfaces/Types.tsx";
+import {useMutation} from "@tanstack/react-query";
+import axios from "axios";
 
 export default function Login() {
     const {
@@ -18,7 +18,25 @@ export default function Login() {
         resolver: yupResolver(loginSchema),
     });
 
-    const onSubmit: SubmitHandler<LoginType> = (data) => console.log(data);
+    const {userToken, setUserToken} = useContext(UserTokenContext);
+
+    const navigate = useNavigate();
+
+    const mutation = useMutation({
+        mutationFn: (userData: LoginType) => {
+            return axios.post("http://localhost:8080/api/v1/users", userData);
+        },
+        onSuccess:  (response) => {
+            console.log(response);
+            setUserToken({token: "test"})
+            console.log(userToken);
+            navigate(`/users`);
+        }
+    })
+
+    const onSubmit: SubmitHandler<LoginType> = (formData) => {
+        mutation.mutate(formData);
+    }
 
     return (
         <Container style={"flex flex-col justify-center items-center my-40"}>
