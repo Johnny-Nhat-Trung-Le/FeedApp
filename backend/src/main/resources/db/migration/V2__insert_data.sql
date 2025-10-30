@@ -1,15 +1,17 @@
-INSERT INTO users (id, username, email, password) VALUES (
+INSERT INTO users (id, username, email, password, role) VALUES (
 'feffcbac-5713-41ef-9fca-1d5f2d0eb672',
   'Bobby',
   'bobby@email.com',
-  'bobby123'
+  'bobby123',
+  'ADMIN'
 );
 
-INSERT INTO users (id, username, email, password) VALUES (
+INSERT INTO users (id, username, email, password, role) VALUES (
     'dc9e4e99-b2e9-4ef3-9239-4180439dfa93',
     'Billy',
     'billy@email.com',
-    'billy123'
+    'billy123',
+    'USER'
 );
 
 INSERT INTO polls (id, question, valid_until, creator) VALUES (

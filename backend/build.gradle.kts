@@ -31,8 +31,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok")
 
-    implementation ("org.springframework.boot:spring-boot-starter-validation")
-    implementation ("org.flywaydb:flyway-core")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.flywaydb:flyway-core")
 
     runtimeOnly("com.h2database:h2")
 
@@ -43,6 +43,13 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
+
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+
 }
 
 tasks.withType<Test> {

@@ -1,5 +1,6 @@
 package dat250.feedapp.controllers;
 
+import dat250.feedapp.dto.PollRequestDTO;
 import dat250.feedapp.entities.Poll;
 import dat250.feedapp.entities.PollManager;
 import dat250.feedapp.entities.Vote;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin
@@ -31,14 +33,11 @@ public class PollController {
     public ResponseEntity<Poll> createPoll(@Valid @RequestBody Poll poll, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            System.out.println("error is here");
-            System.out.println(bindingResult.getAllErrors());
             return ResponseEntity.badRequest().build();
         }
 
         if (this.pollManager.findUser(poll.getCreator().getId()) != null) {
             Poll createdPoll = this.pollManager.createPoll(poll);
-
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
@@ -50,19 +49,22 @@ public class PollController {
         return ResponseEntity.badRequest().build();
     }
 
-    //Delete poll (Pathvariable id) Husk sjekk at det er creator som får lov til å slette
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePoll(@PathVariable UUID id) {
-        if (this.pollManager.deletePoll(id)) {
-            System.out.println(voteOptionRepository.findAll());
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletePoll(@PathVariable UUID id, @RequestHeader(name = "Authorization") String header) {
+        if (header != null && header.startsWith("Bearer ")) {
+            //the token starts at index 7
+            String token = header.substring(7);
+            if (this.pollManager.deletePoll(id, token)) {
+                return ResponseEntity.noContent().build();
+            }
         }
         return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{pollId}")
-    public ResponseEntity<Poll> getPoll(@PathVariable UUID pollId) {
-        Poll poll = this.pollManager.findPoll(pollId);
+    public ResponseEntity<PollRequestDTO> getPoll(@PathVariable UUID pollId) {
+        PollRequestDTO poll = this.pollManager.findPoll(pollId);
         if (poll != null) {
             return ResponseEntity.ok(poll);
         }
@@ -70,8 +72,8 @@ public class PollController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Poll>> getPolls() {
-        Iterable<Poll> polls = this.pollManager.findPolls();
+    public ResponseEntity<List<PollRequestDTO>> getPolls() {
+        List<PollRequestDTO> polls = this.pollManager.findPolls();
         return ResponseEntity.ok(polls);
     }
 
