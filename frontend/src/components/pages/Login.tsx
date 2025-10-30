@@ -18,18 +18,17 @@ export default function Login() {
         resolver: yupResolver(loginSchema),
     });
 
-    const {userToken, setUserToken} = useContext(UserTokenContext);
+    const {setUserToken} = useContext(UserTokenContext);
 
     const navigate = useNavigate();
 
     const mutation = useMutation({
         mutationFn: (userData: LoginType) => {
-            return axios.post("http://localhost:8080/api/v1/users", userData);
+            return axios.post("http://localhost:8080/api/v1/auth/login", userData);
         },
         onSuccess:  (response) => {
             console.log(response);
-            setUserToken({token: "test"})
-            console.log(userToken);
+            setUserToken({token: response.data})
             navigate(`/users`);
         }
     })

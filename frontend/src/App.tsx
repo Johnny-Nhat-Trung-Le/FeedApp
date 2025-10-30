@@ -9,6 +9,7 @@ import Footer from "./components/common/Footer.tsx";
 import Container from "./components/common/utils/Container.tsx";
 import AuthProvider from "./context/AuthProvider.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import User from "./components/pages/User.tsx";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function App() {
                                 <Route path={"/polls"} element={<Polls/>}/>
                                 <Route path={"/register"} element={<Register/>} />
                                 <Route path={"/login"} element={<Login/>}/>
+                                <Route path={"/users"} element={<User/>}/>
                             </Routes>
                         </main>
                         <Footer/>
