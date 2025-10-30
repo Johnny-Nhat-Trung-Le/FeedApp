@@ -1,0 +1,7 @@
+.wavybox {
+  --mask:
+          radial-gradient(223.61px at 50% 300px,#000 99%,#0000 101%) calc(50% - 200px) 0/400px 100%,
+          radial-gradient(223.61px at 50% -200px,#0000 99%,#000 101%) 50% 100px/400px 100% repeat-x;
+  -webkit-mask: var(--mask);
+  mask: var(--mask);
+}
