@@ -6,7 +6,7 @@ import Container from "../common/utils/Container.tsx";
 import {useMutation} from "@tanstack/react-query";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import type {UserType} from "../interfaces/Types.tsx";
+import type {UserType} from "../../interfaces/Types.tsx";
 
 export default function Register() {
     const {

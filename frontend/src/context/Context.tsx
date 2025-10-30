@@ -1,5 +1,5 @@
 import {createContext} from "react";
-import type { UserTokenInterface} from "../components/interfaces/Interfaces.ts";
+import type { UserTokenInterface} from "../interfaces/Interfaces.ts";
 
 export const UserTokenContext = createContext<UserTokenInterface>({
     userToken: {

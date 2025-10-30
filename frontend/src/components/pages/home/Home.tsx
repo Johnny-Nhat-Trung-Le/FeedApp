@@ -9,7 +9,7 @@ export default function Home() {
                 <div className={"flex flex-col gap-4 z-10 relative"}>
                     <h2 className={"text-primary font-bold"}>Easy to make, easy to use</h2>
                     <h1>Create polls and get people's opinions!</h1>
-                    <Button title={"Get started"}
+                    <Button url={"/register"} title={"Get started"}
                             style={"bg-primary text-white border hover:bg-white hover:text-primary hover:border-primary"}/>
                 </div>
                 <img src={"/src/assets/header-img.jpg"} alt="hands voting on different numbers"
