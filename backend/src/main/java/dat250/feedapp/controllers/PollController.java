@@ -64,8 +64,6 @@ public class PollController {
     @GetMapping("/{pollId}")
     public ResponseEntity<PollRequestDTO> getPoll(@PathVariable UUID pollId) {
         PollRequestDTO poll = this.pollManager.findPoll(pollId);
-        System.out.println("HERE is pollDTO");
-        System.out.println(poll);
         if (poll != null) {
             return ResponseEntity.ok(poll);
         }

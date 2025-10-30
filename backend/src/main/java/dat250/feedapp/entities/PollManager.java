@@ -51,7 +51,7 @@ public class PollManager {
     public PollRequestDTO findPoll(UUID id) {
 
         Optional<Poll> pollOpt = pollRepository.findById(id);
-        System.out.println(pollOpt);
+
         if (pollOpt.isPresent()) {
             return convertPollToDTO(pollOpt.get());
         }
