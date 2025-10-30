@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.time.Instant;
 import java.util.Set;
@@ -18,7 +17,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-@ToString
 @Table(name = "polls")
 public class Poll {
 
@@ -51,4 +49,13 @@ public class Poll {
         this.creator = creator;
     }
 
+    @Override
+    public String toString() {
+        return "Poll{" +
+                "validUntil=" + validUntil +
+                ", publishedAt=" + publishedAt +
+                ", question='" + question + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

@@ -1,5 +1,6 @@
 package dat250.feedapp.controllers;
 
+import dat250.feedapp.dto.PollRequestDTO;
 import dat250.feedapp.entities.Poll;
 import dat250.feedapp.entities.PollManager;
 import dat250.feedapp.entities.Vote;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -60,8 +62,10 @@ public class PollController {
     }
 
     @GetMapping("/{pollId}")
-    public ResponseEntity<Poll> getPoll(@PathVariable UUID pollId) {
-        Poll poll = this.pollManager.findPoll(pollId);
+    public ResponseEntity<PollRequestDTO> getPoll(@PathVariable UUID pollId) {
+        PollRequestDTO poll = this.pollManager.findPoll(pollId);
+        System.out.println("HERE is pollDTO");
+        System.out.println(poll);
         if (poll != null) {
             return ResponseEntity.ok(poll);
         }
@@ -69,8 +73,8 @@ public class PollController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Poll>> getPolls() {
-        Iterable<Poll> polls = this.pollManager.findPolls();
+    public ResponseEntity<List<PollRequestDTO>> getPolls() {
+        List<PollRequestDTO> polls = this.pollManager.findPolls();
         return ResponseEntity.ok(polls);
     }
 

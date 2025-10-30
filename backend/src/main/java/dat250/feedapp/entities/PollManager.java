@@ -1,5 +1,6 @@
 package dat250.feedapp.entities;
 
+import dat250.feedapp.dto.PollRequestDTO;
 import dat250.feedapp.repositories.PollRepository;
 import dat250.feedapp.repositories.UserRepository;
 import dat250.feedapp.repositories.VoteOptionRepository;
@@ -13,8 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PollManager {
@@ -45,13 +48,30 @@ public class PollManager {
         return userOpt.orElse(null);
     }
 
-    public Poll findPoll(UUID id) {
+    public PollRequestDTO findPoll(UUID id) {
+
         Optional<Poll> pollOpt = pollRepository.findById(id);
-        return pollOpt.orElse(null);
+        System.out.println(pollOpt);
+        if (pollOpt.isPresent()) {
+            return convertPollToDTO(pollOpt.get());
+        }
+        return null;
     }
 
-    public Iterable<Poll> findPolls() {
-        return pollRepository.findAll();
+    private PollRequestDTO convertPollToDTO(Poll poll) {
+        return PollRequestDTO.builder()
+                .id(poll.getId())
+                .question(poll.getQuestion())
+                .publishedAt(poll.getPublishedAt())
+                .validUntil(poll.getValidUntil())
+                .creator(poll.getCreator().getUsername())
+                .options(poll.getOptions())
+                .build();
+
+    }
+
+    public List<PollRequestDTO> findPolls() {
+        return pollRepository.findAll().stream().map(this::convertPollToDTO).collect(Collectors.toList());
     }
 
     public Poll createPoll(Poll poll) {
