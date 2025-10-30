@@ -73,7 +73,7 @@ public class PollManager {
         return null;
     }
 
-    //TODO maybe have separate service class for this?
+
     public User createUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
             //Encrypt the password before saving the user
@@ -85,13 +85,6 @@ public class PollManager {
         return null;
     }
 
-    /**
-     * handle login of users
-     *
-     * @param username
-     * @param password
-     * @return a unique session token
-     */
     public String login(String username, String password) {
 
         //Specify what type of authentication token we want to use

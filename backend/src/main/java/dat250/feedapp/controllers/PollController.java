@@ -35,8 +35,6 @@ public class PollController {
 
         if (this.pollManager.findUser(poll.getCreator().getId()) != null) {
             Poll createdPoll = this.pollManager.createPoll(poll);
-            System.out.println("POLLLLL underherherherhehrherehrhrhhrrerr");
-
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
@@ -48,11 +46,10 @@ public class PollController {
         return ResponseEntity.badRequest().build();
     }
 
-    //Delete poll (Pathvariable id) Husk sjekk at det er creator som får lov til å slette
+    //Delete poll (Pathvariable id) Husk sjekk at det er creator som får lov til å slette TODO
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePoll(@PathVariable UUID id) {
         if (this.pollManager.deletePoll(id)) {
-            System.out.println(voteOptionRepository.findAll());
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.badRequest().build();

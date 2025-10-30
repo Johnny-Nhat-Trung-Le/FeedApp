@@ -42,7 +42,7 @@ public class User implements UserDetails, CredentialsContainer {
     @NotNull
     @Size(min = 3)
     private String password;
-    //JPA calls noArgsConstructor thus have to initialize here TODO
+
     @Enumerated(EnumType.STRING)
     private Roles role = Roles.USER;
 

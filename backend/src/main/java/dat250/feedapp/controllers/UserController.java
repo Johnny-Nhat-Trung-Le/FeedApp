@@ -29,20 +29,4 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
-        User createdUser = this.pollManager.createUser(user);
-        if (createdUser != null) {
-            UserDTO userDTO = UserDTO.builder().username(createdUser.getUsername()).email(createdUser.getEmail()).build();
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdUser.getId()).toUri();
-            //TODO remove after debug
-            System.out.println(createdUser.getId());
-            return ResponseEntity.created(location).body(userDTO);
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
 }
