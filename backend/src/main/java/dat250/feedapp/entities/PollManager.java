@@ -59,9 +59,18 @@ public class PollManager {
         return pollRepository.save(poll);
     }
 
-    public boolean deletePoll(UUID id) {
-        pollRepository.deleteById(id);
-        return !pollRepository.existsById(id);
+    public boolean deletePoll(UUID id, String token) {
+        Optional<Poll> maybePoll = pollRepository.findById(id);
+        // To avoid cyclic dependency
+        String tokenUser = jwtService.getUsernameByToken(token);
+        if (maybePoll.isPresent()) {
+            Poll poll = maybePoll.get();
+            if (poll.getCreator().getUsername().equals(tokenUser)) {
+                pollRepository.deleteById(id);
+                return !pollRepository.existsById(id);
+            }
+        }
+        return false;
     }
 
 
@@ -75,7 +84,8 @@ public class PollManager {
 
 
     public User createUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
+        if (userRepository.findByEmail(user.getEmail()).isEmpty()
+                && userRepository.findByUsername(user.getUsername()).isEmpty()) {
             //Encrypt the password before saving the user
             String password = user.getPassword();
             String encodedPassword = passwordEncoder.encode(password);

@@ -25,9 +25,12 @@ public class AccessController {
         String user = userAuthDTO.getUsername();
         String password = userAuthDTO.getPassword();
         String sessionToken = this.pollManager.login(user, password);
+
         if (sessionToken != null) {
+
             return ResponseEntity.ok(sessionToken);
         }
+        //will never occur if there is bad request, since authentication manager throws 401 response code
         return ResponseEntity.badRequest().build();
     }
 
@@ -46,6 +49,5 @@ public class AccessController {
         }
         return ResponseEntity.badRequest().build();
     }
-
 
 }

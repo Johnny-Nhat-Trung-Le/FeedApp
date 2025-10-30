@@ -46,11 +46,15 @@ public class PollController {
         return ResponseEntity.badRequest().build();
     }
 
-    //Delete poll (Pathvariable id) Husk sjekk at det er creator som får lov til å slette TODO
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePoll(@PathVariable UUID id) {
-        if (this.pollManager.deletePoll(id)) {
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletePoll(@PathVariable UUID id, @RequestHeader(name = "Authorization") String header) {
+        if (header != null && header.startsWith("Bearer ")) {
+            //the token starts at index 7
+            String token = header.substring(7);
+            if (this.pollManager.deletePoll(id, token)) {
+                return ResponseEntity.noContent().build();
+            }
         }
         return ResponseEntity.badRequest().build();
     }

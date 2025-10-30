@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS users (
+create TABLE IF NOT EXISTS users (
     id UUID DEFAULT RANDOM_UUID() PRIMARY KEY ,
     username VARCHAR (255) NOT NULL,
     email VARCHAR (255) NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     role VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS polls (
+create TABLE IF NOT EXISTS polls (
     id UUID DEFAULT RANDOM_UUID() PRIMARY KEY ,
     question VARCHAR (255) NOT NULL,
     published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -14,14 +14,14 @@ CREATE TABLE IF NOT EXISTS polls (
     creator UUID NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS votes (
+create TABLE IF NOT EXISTS votes (
     id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
     vote_option_id UUID NOT NULL,
     published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id UUID NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS vote_options (
+create TABLE IF NOT EXISTS vote_options (
     id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
     caption VARCHAR (255) NOT NULL,
     presentation_order INT NOT NULL,

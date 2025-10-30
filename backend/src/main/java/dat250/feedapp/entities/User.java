@@ -42,7 +42,6 @@ public class User implements UserDetails, CredentialsContainer {
     @NotNull
     @Size(min = 3)
     private String password;
-
     @Enumerated(EnumType.STRING)
     private Roles role = Roles.USER;
 
