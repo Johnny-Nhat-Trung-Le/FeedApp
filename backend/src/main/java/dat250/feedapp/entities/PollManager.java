@@ -15,9 +15,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.UnifiedJedis;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -54,6 +56,8 @@ public class PollManager {
 
     @Autowired
     private PollEventPublisher pollEventPublisher;
+
+    private final UnifiedJedis unifiedJedis = new UnifiedJedis("redis://localhost:6379");
 
     private UUID anonymousID = UUID.fromString("08696b10-34b0-4741-812a-b261947c3a16");
 
@@ -104,12 +108,12 @@ public class PollManager {
             Poll poll = maybePoll.get();
             if (poll.getCreator().getUsername().equals(tokenUser)) {
                 pollRepository.deleteById(id);
+                unifiedJedis.del("poll:" + poll.getId());
                 return !pollRepository.existsById(id);
             }
         }
         return false;
     }
-
 
     public Vote createVote(UUID pollId, Vote vote) {
         if (pollRepository.existsById(pollId))
@@ -126,7 +130,7 @@ public class PollManager {
     }
 
     /**
-     * save the {@link Vote} to the repository and notify message service
+     * save the {@link Vote} to the repository, notify message service and store in cache
      * @param pollId
      * @param vote
      * @return created Vote
@@ -135,15 +139,30 @@ public class PollManager {
         vote.setPublishedAt(Instant.now());
         voteRepository.save(vote);
         pollEventPublisher.publishVote(pollId, vote);
+        // update cache
+        unifiedJedis.hincrBy("poll:" + pollId, "voteOption:" + vote.getVoteOption().getId(), 1);
+        unifiedJedis.expire("poll:" + pollId, 1000);
         return vote;
     }
+
+    private boolean checkRedis(String key){
+        Map<String, String> jsonCounter = unifiedJedis.hgetAll(key);
+        return (jsonCounter != null && !jsonCounter.isEmpty());
+    }
+
     public Vote updateVote(UUID pollId, Vote vote) {
-        if (pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
+        Vote oldVote = voteRepository.findById(vote.getId()).orElse(null);
+
+        if (oldVote != null && pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
             vote.setPublishedAt(Instant.now());
+            UUID oldVoteOption = oldVote.getVoteOption().getId();
             voteRepository.save(vote);
             pollEventPublisher.publishVote(pollId, vote);
+            // update cache
+            unifiedJedis.hincrBy("poll:" + pollId, "voteOption:" + oldVoteOption, -1);
+            unifiedJedis.hincrBy("poll:" + pollId, "voteOption:" + vote.getVoteOption().getId(), 1);
+            unifiedJedis.expire("poll:" + pollId, 1000);
             return vote;
-
         }
         return null;
     }
