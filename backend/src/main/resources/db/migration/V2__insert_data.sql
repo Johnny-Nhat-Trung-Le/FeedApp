@@ -39,3 +39,9 @@ INSERT INTO vote_options (id, caption, presentation_order, poll_id) VALUES (
        2,
        'da3acfed-ef7b-477f-b1dc-76703a1dda2a');
 
+INSERT INTO votes (id,vote_option_id, user_id) VALUES (
+       'acf8bdaa-f52c-4008-9514-940aa0889580',
+       '562a6a39-dbc9-4648-bcaa-2c6ad46e3300',
+       'dc9e4e99-b2e9-4ef3-9239-4180439dfa93'
+                                                    );
+

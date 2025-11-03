@@ -1,6 +1,7 @@
 package dat250.feedapp.entities;
 
 import dat250.feedapp.dto.PollRequestDTO;
+import dat250.feedapp.dto.VoteOptionDTO;
 import dat250.feedapp.messager.PollBrokerManager;
 import dat250.feedapp.messager.PollEventListener;
 import dat250.feedapp.messager.PollEventPublisher;
@@ -18,10 +19,7 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.UnifiedJedis;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -178,6 +176,37 @@ public class PollManager {
             return userRepository.save(user);
         }
         return null;
+    }
+
+    public List<VoteOptionDTO> getVoteOptions(UUID pollId) {
+        List<VoteOptionDTO> voteOptions = new ArrayList<>();
+        if (checkRedis("poll:" + pollId)){
+            System.out.println("THIS IS FROM CACHE");
+            Map<String, String> jsonCounter = this.unifiedJedis.hgetAll("poll:" + pollId);
+            for (Map.Entry<String, String> entry : jsonCounter.entrySet()) {
+                UUID id = UUID.fromString(entry.getKey().split(":")[1]);
+                VoteOptionDTO dto = VoteOptionDTO.builder()
+                        .id(id)
+                        .count(Integer.parseInt(entry.getValue()))
+                        .build();
+                voteOptions.add(dto);
+            }
+        } else {
+            System.out.println("THIS IS FROM DB");
+            List<VoteOption> options = voteOptionRepository.getVoteOptionsByPollId(pollId);
+            for (VoteOption voteOption : options) {
+                Integer count = voteRepository.getVoteByVoteOptionId(voteOption.getId());
+                VoteOptionDTO dto = VoteOptionDTO.builder()
+                        .id(voteOption.getId())
+                        .count(count)
+                        .build();
+                voteOptions.add(dto);
+                // save to cache
+                unifiedJedis.hset("poll:" + pollId, "voteOption:" + voteOption.getId(), Integer.toString(count));
+                unifiedJedis.expire("poll:" + pollId, 1000);
+            }
+        }
+        return voteOptions;
     }
 
     public String login(String username, String password) {

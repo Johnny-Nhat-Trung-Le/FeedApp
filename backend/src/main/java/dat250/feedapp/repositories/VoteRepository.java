@@ -15,4 +15,10 @@ public interface VoteRepository extends JpaRepository<Vote, UUID> {
             """,
             nativeQuery = true)
     Integer getVoteByUserID(@Param("id") UUID id);
+
+    @Query(value = """
+            SELECT COUNT(*) FROM VOTES WHERE VOTE_OPTION_ID = :id
+            """,
+            nativeQuery = true)
+    Integer getVoteByVoteOptionId(@Param("id") UUID id);
 }
