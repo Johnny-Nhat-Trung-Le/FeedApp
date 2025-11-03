@@ -1,4 +1,4 @@
-package dat250.feedapp.controllers;
+package dat250.feedapp.controllers.non_auth;
 
 import dat250.feedapp.dto.UserAuthDTO;
 import dat250.feedapp.dto.UserDTO;
@@ -15,12 +15,12 @@ import java.net.URI;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/")
 public class AccessController {
     @Autowired
     private PollManager pollManager;
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseEntity<String> login(@RequestBody UserAuthDTO userAuthDTO) {
         String user = userAuthDTO.getUsername();
         String password = userAuthDTO.getPassword();
@@ -34,7 +34,7 @@ public class AccessController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();

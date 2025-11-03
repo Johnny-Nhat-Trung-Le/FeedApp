@@ -1,9 +1,9 @@
 package dat250.feedapp.entities;
 
+import dat250.feedapp.dto.PollRequestDTO;
 import dat250.feedapp.messager.PollBrokerManager;
 import dat250.feedapp.messager.PollEventListener;
 import dat250.feedapp.messager.PollEventPublisher;
-import dat250.feedapp.dto.PollRequestDTO;
 import dat250.feedapp.repositories.PollRepository;
 import dat250.feedapp.repositories.UserRepository;
 import dat250.feedapp.repositories.VoteOptionRepository;
@@ -54,6 +54,8 @@ public class PollManager {
 
     @Autowired
     private PollEventPublisher pollEventPublisher;
+
+    private UUID anonymousID = UUID.fromString("08696b10-34b0-4741-812a-b261947c3a16");
 
     public User findUser(UUID id) {
         Optional<User> userOpt = userRepository.findById(id);
@@ -110,11 +112,38 @@ public class PollManager {
 
 
     public Vote createVote(UUID pollId, Vote vote) {
+        if (pollRepository.existsById(pollId))
+            //anonymous voting
+            if (vote.getUserId() == null) {
+                vote.setUserId(anonymousID);
+                return saveVote(pollId,vote);
+            } else if (userRepository.existsById(vote.getUserId())) {
+                if (voteRepository.getVoteByUserID(vote.getUserId()) == 0) {
+                    return saveVote(pollId,vote);
+                }
+            }
+        return null;
+    }
+
+    /**
+     * save the {@link Vote} to the repository and notify message service
+     * @param pollId
+     * @param vote
+     * @return created Vote
+     */
+    private Vote saveVote(UUID pollId, Vote vote){
+        vote.setPublishedAt(Instant.now());
+        voteRepository.save(vote);
+        pollEventPublisher.publishVote(pollId, vote);
+        return vote;
+    }
+    public Vote updateVote(UUID pollId, Vote vote) {
         if (pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
             vote.setPublishedAt(Instant.now());
             voteRepository.save(vote);
             pollEventPublisher.publishVote(pollId, vote);
             return vote;
+
         }
         return null;
     }

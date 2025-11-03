@@ -2,8 +2,17 @@ package dat250.feedapp.repositories;
 
 import dat250.feedapp.entities.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.UUID;
 
 public interface VoteRepository extends JpaRepository<Vote, UUID> {
+
+    @Query(value = """
+            SELECT COUNT(*) FROM VOTES WHERE USER_ID = :id
+            """,
+            nativeQuery = true)
+    Integer getVoteByUserID(@Param("id") UUID id);
 }

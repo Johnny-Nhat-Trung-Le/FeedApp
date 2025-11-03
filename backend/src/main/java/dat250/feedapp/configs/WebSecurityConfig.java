@@ -31,24 +31,20 @@ import java.util.Optional;
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
-    @Autowired
-    private UserRepository userRepo;
 
     @Autowired
     private JWTFilter jwtFilter;
 
-  
-    //TODO FIGURE OUT THE PATHS THAT ARE ALLOWED, AND FIGURE OUT THE ROLES
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
         return security
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/admin/secret").hasAnyAuthority(Roles.ADMIN.getAuthority())
-                        .requestMatchers("/api/v1/users/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/v1/auth/register").permitAll()
-                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasAnyAuthority(Roles.ADMIN.getAuthority())
+                        .requestMatchers("/api/v1/register").permitAll()
+                        .requestMatchers("/api/v1/login").permitAll()
+                        .requestMatchers("/api/v1/public/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

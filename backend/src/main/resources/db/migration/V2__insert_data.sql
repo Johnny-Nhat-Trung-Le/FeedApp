@@ -10,10 +10,16 @@ INSERT INTO users (id, username, email, password, role) VALUES (
     'dc9e4e99-b2e9-4ef3-9239-4180439dfa93',
     'Billy',
     'billy@email.com',
-    'billy123',
+    '$2a$10$b2OwERbM8P8H.ssuPSCbhOy2gH4H6DA5vSWGfY8en5L/TvXc4rXWy',
     'USER'
 );
-
+INSERT INTO users (id, username, email, password, role) VALUES (
+    'fd686afd-3f77-4f8a-abbf-7637729e1979',
+    'admin',
+    'admin@email.com',
+    '$2a$10$/dnkf4iI5WUBgDZnLRdY.OloPQpyzIKrgLp4xVud1/YV4QGhAeX7q',
+    'ADMIN'
+);
 INSERT INTO polls (id, question, valid_until, creator) VALUES (
      'da3acfed-ef7b-477f-b1dc-76703a1dda2a',
     'What animal?',
