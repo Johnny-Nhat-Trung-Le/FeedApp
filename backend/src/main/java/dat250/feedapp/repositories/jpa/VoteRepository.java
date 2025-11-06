@@ -1,8 +1,7 @@
-package dat250.feedapp.repositories;
+package dat250.feedapp.repositories.jpa;
 
 import dat250.feedapp.entities.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

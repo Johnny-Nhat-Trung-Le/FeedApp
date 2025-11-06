@@ -4,10 +4,12 @@ import dat250.feedapp.dto.PollRequestDTO;
 import dat250.feedapp.messager.PollBrokerManager;
 import dat250.feedapp.messager.PollEventListener;
 import dat250.feedapp.messager.PollEventPublisher;
-import dat250.feedapp.repositories.PollRepository;
-import dat250.feedapp.repositories.UserRepository;
-import dat250.feedapp.repositories.VoteOptionRepository;
-import dat250.feedapp.repositories.VoteRepository;
+import dat250.feedapp.repositories.jpa.PollRepository;
+import dat250.feedapp.repositories.jpa.UserRepository;
+import dat250.feedapp.repositories.jpa.VoteOptionRepository;
+import dat250.feedapp.repositories.jpa.VoteRepository;
+import dat250.feedapp.repositories.neo.NeoPollRepository;
+import dat250.feedapp.repositories.neo.NeoVoteRepository;
 import dat250.feedapp.securities.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,37 +27,32 @@ import java.util.stream.Collectors;
 @Service
 public class PollManager {
 
+    private final UUID anonymousID = UUID.fromString("08696b10-34b0-4741-812a-b261947c3a16");
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PollRepository pollRepository;
-
     @Autowired
     private VoteRepository voteRepository;
-
     @Autowired
     private VoteOptionRepository voteOptionRepository;
-
     @Autowired
     private AuthenticationManager authManager;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private JWTService jwtService;
-
     @Autowired
     private PollBrokerManager pollBrokerManager;
-
     @Autowired
     private PollEventListener pollEventListener;
-
     @Autowired
     private PollEventPublisher pollEventPublisher;
 
-    private UUID anonymousID = UUID.fromString("08696b10-34b0-4741-812a-b261947c3a16");
+    @Autowired
+    private NeoVoteRepository neoVoteRepository;
+    @Autowired
+    private NeoPollRepository neoPollRepository;
 
     public User findUser(UUID id) {
         Optional<User> userOpt = userRepository.findById(id);
@@ -116,10 +113,10 @@ public class PollManager {
             //anonymous voting
             if (vote.getUserId() == null) {
                 vote.setUserId(anonymousID);
-                return saveVote(pollId,vote);
+                return saveVote(pollId, vote);
             } else if (userRepository.existsById(vote.getUserId())) {
                 if (voteRepository.getVoteByUserID(vote.getUserId()) == 0) {
-                    return saveVote(pollId,vote);
+                    return saveVote(pollId, vote);
                 }
             }
         return null;
@@ -127,16 +124,21 @@ public class PollManager {
 
     /**
      * save the {@link Vote} to the repository and notify message service
+     *
      * @param pollId
      * @param vote
      * @return created Vote
      */
-    private Vote saveVote(UUID pollId, Vote vote){
+    private Vote saveVote(UUID pollId, Vote vote) {
         vote.setPublishedAt(Instant.now());
         voteRepository.save(vote);
+        neoVoteRepository.save(vote);
+        System.out.println(neoVoteRepository.findAll());
         pollEventPublisher.publishVote(pollId, vote);
+
         return vote;
     }
+
     public Vote updateVote(UUID pollId, Vote vote) {
         if (pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
             vote.setPublishedAt(Instant.now());

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,10 +25,12 @@ import java.util.UUID;
 @Entity
 @ToString
 @Table(name = "USERS")
+@Node("User")
 public class User implements UserDetails, CredentialsContainer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @org.springframework.data.neo4j.core.schema.Id
     private UUID id;
 
     @NotNull

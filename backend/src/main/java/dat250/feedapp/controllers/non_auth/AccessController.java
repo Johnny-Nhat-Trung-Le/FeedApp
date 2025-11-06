@@ -25,7 +25,6 @@ public class AccessController {
         String user = userAuthDTO.getUsername();
         String password = userAuthDTO.getPassword();
         String sessionToken = this.pollManager.login(user, password);
-
         if (sessionToken != null) {
 
             return ResponseEntity.ok(sessionToken);

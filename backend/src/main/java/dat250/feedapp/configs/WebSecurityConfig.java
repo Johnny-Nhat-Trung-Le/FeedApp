@@ -1,7 +1,7 @@
 package dat250.feedapp.configs;
 
 import dat250.feedapp.entities.User;
-import dat250.feedapp.repositories.UserRepository;
+import dat250.feedapp.repositories.jpa.UserRepository;
 import dat250.feedapp.securities.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

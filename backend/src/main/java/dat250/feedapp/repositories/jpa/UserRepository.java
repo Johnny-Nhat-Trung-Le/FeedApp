@@ -1,4 +1,4 @@
-package dat250.feedapp.repositories;
+package dat250.feedapp.repositories.jpa;
 
 import dat250.feedapp.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;

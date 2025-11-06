@@ -49,7 +49,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
-
+    implementation("org.springframework.boot:spring-boot-starter-data-neo4j:4.0.0-RC1")
 }
 
 tasks.withType<Test> {

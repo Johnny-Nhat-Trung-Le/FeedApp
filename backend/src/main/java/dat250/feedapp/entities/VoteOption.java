@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.util.Set;
 import java.util.UUID;
@@ -18,10 +20,12 @@ import java.util.UUID;
 @Entity
 @ToString
 @Table(name = "vote_options")
+@Node("VoteOption")
 public class VoteOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @org.springframework.data.neo4j.core.schema.Id
     private UUID id;
 
     @NotNull
@@ -32,10 +36,12 @@ public class VoteOption {
 
     @ManyToOne
     @JsonBackReference
+    @Relationship(type = "IS_IN", direction = Relationship.Direction.OUTGOING)
     private Poll poll;
 
     @OneToMany(mappedBy = "voteOption", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @Relationship(type = "HAS_VOTES", direction = Relationship.Direction.INCOMING)
     private Set<Vote> votes;
 
     public VoteOption(String caption, Integer presentationOrder) {
