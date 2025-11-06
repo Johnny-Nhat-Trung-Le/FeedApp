@@ -58,12 +58,12 @@ export default function Poll({poll} : {poll:PollType}) {
         getVotes();
     }, [poll])
 
-    return <article className={"py-5 px-8 bg-white max-w-xs flex flex-col justify-center items-center gap-5 shadow-lg rounded-sm"}>
-        <h3 className={"font-bold text-center"}>{poll.question}</h3>
-        <ul className={"flex flex-col gap-3 w-full"}>
+    return <article className={"py-5 px-8 bg-white max-w-xs min-w-2xs flex flex-col justify-center items-center gap-5 shadow-lg rounded-sm"}>
+        <h3 className={"font-bold text-center capitalize"}>{poll.question}</h3>
+        <ul className={"flex flex-col gap-3 w-full max-h-33 overflow-y-auto"}>
             {voteOptions.map((option: PollOptionsType) => (
                 <li key={option.id} className={`flex flex-col gap-2 border p-2 ${selectedOption == option.id ? "border-light-pink" : "border-transparent"}`} onClick={() => setSelectedOption(option.id)}>
-                    <label htmlFor={`vote option progress bar for the option ${option.caption}`}>{option.caption}</label>
+                    <label htmlFor={`vote option progress bar for the option ${option.caption}`} className={"capitalize"}>{option.caption}</label>
                     <progress value={votesPerOptions.get(option.caption)} max={totalVotes}></progress>
                 </li>
             ))}
