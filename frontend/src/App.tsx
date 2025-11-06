@@ -2,7 +2,7 @@ import './App.css'
 import {Routes, Route, BrowserRouter} from "react-router-dom";
 import Home from "./components/pages/home/Home.tsx";
 import Navbar from "./components/common/Navbar.tsx";
-import Polls from "./components/pages/Polls.tsx";
+import Polls from "./components/pages/polls/Polls.tsx";
 import Register from "./components/pages/Register.tsx";
 import Login from "./components/pages/Login.tsx";
 import Footer from "./components/common/Footer.tsx";

@@ -22,7 +22,7 @@ export default function Navbar() {
                     <NavLink to={"/register"} className={"py-2 px-6 rounded-sm border hover:bg-black hover:text-white"}>
                         Register
                     </NavLink>
-                    <NavLink to={"/login"} className={"py-2 px-6 rounded-sm border bg-black text-white hover:bg-white hover:text-black hover:border "}>
+                    <NavLink to={"/login"} className={"py-2 px-6 rounded-sm border bg-black text-white hover:bg-white hover:text-black hover:border"}>
                         Login
                     </NavLink>
                 </>
