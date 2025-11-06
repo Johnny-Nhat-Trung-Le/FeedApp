@@ -24,7 +24,7 @@ export default function Login() {
 
     const mutation = useMutation({
         mutationFn: (userData: LoginType) => {
-            return axios.post("http://localhost:8080/api/v1/auth/login", userData);
+            return axios.post("http://localhost:8080/api/v1/login", userData);
         },
         onSuccess:  (response) => {
             console.log(response);
