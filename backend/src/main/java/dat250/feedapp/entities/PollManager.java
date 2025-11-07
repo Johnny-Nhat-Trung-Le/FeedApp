@@ -149,9 +149,9 @@ public class PollManager {
     }
 
     public Vote updateVote(UUID pollId, Vote vote) {
-        Vote oldVote = voteRepository.findById(vote.getId()).orElse(null);
-
+        Vote oldVote = voteRepository.getOldVoteId(pollId,vote.getUserId());
         if (oldVote != null && pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
+            voteRepository.deleteById(oldVote.getId());
             vote.setPublishedAt(Instant.now());
             UUID oldVoteOption = oldVote.getVoteOption().getId();
             voteRepository.save(vote);
