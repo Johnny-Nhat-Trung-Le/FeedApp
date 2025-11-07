@@ -140,12 +140,11 @@ public class PollManager {
     }
 
     public Vote updateVote(UUID pollId, Vote vote) {
+        Vote oldVote = voteRepository.getOldVoteId(pollId, vote.getUserId());
         if (pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
-            vote.setPublishedAt(Instant.now());
-            voteRepository.save(vote);
-            pollEventPublisher.publishVote(pollId, vote);
-            return vote;
-
+            neoVoteRepository.deleteVoteById(oldVote.getId());
+            voteRepository.deleteById(oldVote.getId());
+            return saveVote(pollId, vote);
         }
         return null;
     }
