@@ -1,11 +1,11 @@
 import {useContext} from "react";
-import {UserTokenContext} from "../../context/Context.tsx";
+import {UserDataContext} from "../../context/Context.tsx";
 import Container from "../common/utils/Container.tsx";
 
 export default function User(){
-    const {userToken} = useContext(UserTokenContext);
+    const {userData} = useContext(UserDataContext);
 
-    console.log(userToken);
+    console.log(userData);
 
     return <Container>
         <p>I am a user</p>

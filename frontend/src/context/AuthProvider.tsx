@@ -1,13 +1,14 @@
 import {type ReactNode, useState} from "react";
-import {UserTokenContext} from "./Context.tsx";
-import type {TokenContext} from "../interfaces/Interfaces.ts";
+import {UserDataContext} from "./Context.tsx";
+import type {UserContext} from "../interfaces/Interfaces.ts";
 
 export default function AuthProvider({children}: {children: ReactNode}) {
-    const [userToken, setUserToken] = useState<TokenContext>({
+    const [userData, setUserData] = useState<UserContext>({
         token: "",
+        id: ""
     });
 
-    return <UserTokenContext value={{userToken, setUserToken}}>
+    return <UserDataContext value={{userData, setUserData}}>
             {children}
-        </UserTokenContext>
+        </UserDataContext>
 }

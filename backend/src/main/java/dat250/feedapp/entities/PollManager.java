@@ -162,7 +162,6 @@ public class PollManager {
     }
 
     public String login(String username, String password) {
-
         //Specify what type of authentication token we want to use
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 username,
@@ -177,5 +176,12 @@ public class PollManager {
         return null;
     }
 
-
+    public UUID getUserId(String username, String password) {
+        // TODO FIX
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user != null) {
+            return user.getId();
+        }
+        return null;
+    }
 }
