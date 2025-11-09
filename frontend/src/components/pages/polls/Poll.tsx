@@ -9,9 +9,8 @@ export default function Poll({poll} : {poll:PollType}) {
     const [votesPerOptions, setVotesPerOptions] = useState(new Map());
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-    const userId: string = "fd686afd-3f77-4f8a-abbf-7637729e1979";
     const {userData} = useContext(UserDataContext);
-    const userIsAuthenticated: boolean = userId !== "" && userData.token !== '';
+    const userIsAuthenticated: boolean = userData.id !== "" && userData.token !== '';
 
     const disabledStyle: string = "disabled:border disabled:bg-gray-400 disabled:hover:text-white";
     const normalStyle: string = "border bg-black hover:bg-white hover:text-black hover:border";
@@ -59,7 +58,7 @@ export default function Poll({poll} : {poll:PollType}) {
                 voteOption: {
                     id: selectedOption,
                 },
-                userId: userIsAuthenticated ? userId : "",
+                userId: userIsAuthenticated ? userData.id : "",
             }
             voteMutation.mutate(voteRequest);
         }
