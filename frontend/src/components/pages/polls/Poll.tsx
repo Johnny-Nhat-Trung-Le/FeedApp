@@ -22,13 +22,28 @@ export default function Poll({poll} : {poll:PollType}) {
 
     const voteMutation = useMutation({
         mutationFn: (voteRequest: VoteRequestType) => {
-            console.log("vote request", voteRequest);
             const config = {
                 headers: {
                     'Authorization': `Bearer ${userData.token}`
                 }
             }
             return axios.post(`http://localhost:8080/api/v1/public/polls/${poll.id}`, voteRequest, config);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['polls'],
+            })
+        }
+    })
+
+    const updateMutation = useMutation({
+        mutationFn: (voteUpdateRequest: VoteRequestType) => {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${userData.token}`
+                }
+            }
+            return axios.put(`http://localhost:8080/api/v1/polls/${poll.id}`, voteUpdateRequest, config);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
@@ -52,15 +67,40 @@ export default function Poll({poll} : {poll:PollType}) {
         setTotalVotes(totalVotes);
     }
 
+    function findVoteId(userId: string):string {
+        for (const option of voteOptions) {
+            const vote = option.votes.find((vote) => vote.userId === userId);
+            if (vote !== undefined){
+                return vote.id;
+            }
+        }
+        return null;
+    }
+
     function handleVoteSubmit(){
         if (selectedOption !== null) {
-            const voteRequest: VoteRequestType = {
-                voteOption: {
-                    id: selectedOption,
-                },
-                userId: userIsAuthenticated ? userData.id : "",
+            const voteId = findVoteId(userData.id);
+
+            // update vote if user has voted before
+            if (voteId != null){
+                const voteUpdateRequest: VoteRequestType = {
+                    id: voteId,
+                    voteOption: {
+                        id: selectedOption,
+                    },
+                    userId: userIsAuthenticated ? userData.id : "",
+                }
+                updateMutation.mutate(voteUpdateRequest);
+            } else {
+                // vote normally
+                const voteRequest: VoteRequestType = {
+                    voteOption: {
+                        id: selectedOption,
+                    },
+                    userId: userIsAuthenticated ? userData.id : "",
+                }
+                voteMutation.mutate(voteRequest);
             }
-            voteMutation.mutate(voteRequest);
         }
     }
 

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.UUID;
 
-@CrossOrigin
+@CrossOrigin()
 @RestController
 @RequestMapping("/api/v1/polls")
 public class PollController {

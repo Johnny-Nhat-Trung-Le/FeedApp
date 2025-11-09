@@ -31,6 +31,7 @@ export type VoteType = {
 }
 
 export type VoteRequestType = {
+    id: string,
     voteOption: {
         id: string,
     }
