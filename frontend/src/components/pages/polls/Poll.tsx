@@ -17,7 +17,7 @@ export default function Poll({poll} : {poll:PollType}) {
 
     const queryClient = useQueryClient();
     const voteOptions : PollOptionsType[] = poll.options;
-    // sort the options based on presentationOrder in increasing order
+    // sort the options based on presentationOrder in ascending order
     voteOptions.sort((a, b) => a.presentationOrder - b.presentationOrder);
 
     const voteMutation = useMutation({
