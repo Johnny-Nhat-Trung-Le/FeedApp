@@ -1,4 +1,4 @@
-import type {PollOptionsType, PollType, VoteRequestType} from "../../../interfaces/Types.tsx";
+import type {PollOptionsType, PollType, VoteRequestAuthType, VoteRequestType} from "../../../interfaces/Types.tsx";
 import {useContext, useEffect, useState} from "react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
@@ -67,7 +67,7 @@ export default function Poll({poll} : {poll:PollType}) {
         setTotalVotes(totalVotes);
     }
 
-    function findVoteId(userId: string):string {
+    function findVoteId(userId: string):string | null{
         for (const option of voteOptions) {
             const vote = option.votes.find((vote) => vote.userId === userId);
             if (vote !== undefined){
@@ -83,7 +83,7 @@ export default function Poll({poll} : {poll:PollType}) {
 
             // update vote if user has voted before
             if (voteId != null){
-                const voteUpdateRequest: VoteRequestType = {
+                const voteUpdateRequest: VoteRequestAuthType = {
                     id: voteId,
                     voteOption: {
                         id: selectedOption,

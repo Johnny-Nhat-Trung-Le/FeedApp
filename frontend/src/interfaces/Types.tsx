@@ -30,8 +30,15 @@ export type VoteType = {
     userId: string
 }
 
-export type VoteRequestType = {
+export type VoteRequestAuthType = {
     id: string,
+    voteOption: {
+        id: string,
+    }
+    userId: string,
+}
+
+export type VoteRequestType = {
     voteOption: {
         id: string,
     }
