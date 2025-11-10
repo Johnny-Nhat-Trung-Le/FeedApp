@@ -45,7 +45,7 @@ public class Poll {
 
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    @Relationship(type = "HAS", direction = Relationship.Direction.INCOMING)
+    @Relationship(type = "HAS", direction = Relationship.Direction.OUTGOING)
     private Set<VoteOption> options;
 
     public Poll(String question, Instant validUntil, User creator) {

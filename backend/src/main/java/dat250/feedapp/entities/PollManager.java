@@ -88,6 +88,7 @@ public class PollManager {
     public Poll createPoll(Poll poll) {
         poll.setPublishedAt(Instant.now());
         pollRepository.save(poll);
+        neoPollRepository.save(poll);
         pollBrokerManager.registerQueue(poll.getId());
         pollEventListener.registerListener(poll.getId());
         return poll;
@@ -133,7 +134,6 @@ public class PollManager {
         vote.setPublishedAt(Instant.now());
         voteRepository.save(vote);
         neoVoteRepository.save(vote);
-        System.out.println(neoVoteRepository.findAll());
         pollEventPublisher.publishVote(pollId, vote);
 
         return vote;
