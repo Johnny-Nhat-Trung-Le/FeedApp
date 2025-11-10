@@ -1,5 +1,6 @@
 package dat250.feedapp.controllers.non_auth;
 
+import dat250.feedapp.dto.LoginResponseDTO;
 import dat250.feedapp.dto.UserAuthDTO;
 import dat250.feedapp.dto.UserDTO;
 import dat250.feedapp.entities.PollManager;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -21,14 +23,18 @@ public class AccessController {
     private PollManager pollManager;
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody UserAuthDTO userAuthDTO) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody UserAuthDTO userAuthDTO) {
         String user = userAuthDTO.getUsername();
         String password = userAuthDTO.getPassword();
         String sessionToken = this.pollManager.login(user, password);
+        UUID userId = this.pollManager.getUserId(user, password);
 
         if (sessionToken != null) {
-
-            return ResponseEntity.ok(sessionToken);
+            LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
+                    .token(sessionToken)
+                    .userId(userId)
+                    .build();
+            return ResponseEntity.ok(loginResponseDTO);
         }
         //will never occur if there is bad request, since authentication manager throws 401 response code
         return ResponseEntity.badRequest().build();

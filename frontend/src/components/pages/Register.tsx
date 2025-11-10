@@ -21,7 +21,7 @@ export default function Register() {
 
     const mutation = useMutation({
         mutationFn: (formData: UserType) => {
-            return axios.post("http://localhost:8080/api/v1/auth/register", formData)
+            return axios.post("http://localhost:8080/api/v1/register", formData)
         },
         onSuccess:  () => {
             navigate(`/login`);
