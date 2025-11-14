@@ -1,6 +1,7 @@
 package dat250.feedapp.controllers.non_auth;
 
 import dat250.feedapp.dto.PollRequestDTO;
+import dat250.feedapp.dto.VoteOptionDTO;
 import dat250.feedapp.entities.PollManager;
 import dat250.feedapp.entities.Vote;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,15 @@ public class PublicPollController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/{pollId}/votes")
+    public ResponseEntity<List<VoteOptionDTO>> getVotes(@PathVariable UUID pollId) {
+        List<VoteOptionDTO> voteOptions = this.pollManager.getVoteOptions(pollId);
+        return ResponseEntity.ok(voteOptions);
+    }
+
+
+
 
 
 }

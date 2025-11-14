@@ -4,10 +4,13 @@ import dat250.feedapp.entities.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface VoteRepository extends JpaRepository<Vote, UUID> {
 
     @Query(value = """
@@ -17,11 +20,9 @@ public interface VoteRepository extends JpaRepository<Vote, UUID> {
     Integer getVoteByUserID(@Param("id") UUID id);
 
     @Query(value = """
-            SELECT * FROM VOTES WHERE ID = (SELECT VOTES.ID  FROM POLLS, VOTES
-                        WHERE POLLS.id = :pollId 
-                        AND USER_ID = :userId) 
-            LIMIT 1
-            """,
+       SELECT * FROM VOTES WHERE VOTE_OPTION_ID = :id
+       """,
             nativeQuery = true)
-    Vote getOldVoteId(@Param("pollId") UUID pollId, @Param("userId") UUID userId);
+    List<Vote> getVotesByVoteOptionID(@Param("id") UUID id);
+
 }

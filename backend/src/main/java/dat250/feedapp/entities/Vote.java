@@ -3,10 +3,7 @@ package dat250.feedapp.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -20,6 +17,7 @@ import java.util.UUID;
 @ToString
 @Table(name = "votes")
 @Node("Vote")
+@Data
 public class Vote {
 
     @Id

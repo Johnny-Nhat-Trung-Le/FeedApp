@@ -1,9 +1,11 @@
 package dat250.feedapp.entities;
 
 import dat250.feedapp.dto.PollRequestDTO;
+import dat250.feedapp.dto.VoteOptionDTO;
 import dat250.feedapp.messager.PollBrokerManager;
 import dat250.feedapp.messager.PollEventListener;
 import dat250.feedapp.messager.PollEventPublisher;
+import dat250.feedapp.repositories.VoteService;
 import dat250.feedapp.repositories.jpa.PollRepository;
 import dat250.feedapp.repositories.jpa.UserRepository;
 import dat250.feedapp.repositories.jpa.VoteOptionRepository;
@@ -18,10 +20,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
+
 import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +55,10 @@ public class PollManager {
     private NeoVoteRepository neoVoteRepository;
     @Autowired
     private NeoPollRepository neoPollRepository;
+
+    @Autowired
+    private VoteService voteService;
+
 
     public User findUser(UUID id) {
         Optional<User> userOpt = userRepository.findById(id);
@@ -135,15 +141,12 @@ public class PollManager {
         voteRepository.save(vote);
         neoVoteRepository.save(vote);
         pollEventPublisher.publishVote(pollId, vote);
-
         return vote;
     }
 
     public Vote updateVote(UUID pollId, Vote vote) {
-        Vote oldVote = voteRepository.getOldVoteId(pollId, vote.getUserId());
         if (pollRepository.existsById(pollId) && userRepository.existsById(vote.getUserId())) {
-            neoVoteRepository.deleteVoteById(oldVote.getId());
-            voteRepository.deleteById(oldVote.getId());
+            neoVoteRepository.deleteVoteById(vote.getId());
             return saveVote(pollId, vote);
         }
         return null;
@@ -178,5 +181,40 @@ public class PollManager {
         return null;
     }
 
+    public List<VoteOptionDTO> getVoteOptions(UUID pollId) {
+        List<VoteOptionDTO> voteOptions = new ArrayList<>();
+        Poll poll = pollRepository.findById(pollId).orElse(null);
+        if (poll == null) {
+            return voteOptions;
+        }
 
+        Set<VoteOption> set = poll.getOptions();
+        for (VoteOption vo : set) {
+            int count = getNeoVoteCount(vo.getId()).intValue();
+//            System.out.println(neoTempRepository.getVoteCountById(vo.getId()));
+//            int count = 0;
+            System.out.println("This is the count: " + count);
+            if (count > 0) {
+                System.out.println("THIS IS CACHE");
+                VoteOptionDTO dto = VoteOptionDTO.builder()
+                        .id(vo.getId())
+                        .count(count)
+                        .build();
+                voteOptions.add(dto);
+            } else {
+                System.out.println("THIS IS H2");
+                List<Vote> h2Votes = voteRepository.getVotesByVoteOptionID(vo.getId());
+                VoteOptionDTO dto = VoteOptionDTO.builder()
+                        .id(vo.getId())
+                        .count(h2Votes.size())
+                        .build();
+                voteOptions.add(dto);
+            }
+        }
+        return voteOptions;
+    }
+
+    private Long getNeoVoteCount(UUID id) {
+        return voteService.getVoteCountByVoteOptionId(id);
+    }
 }
