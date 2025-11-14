@@ -27,7 +27,9 @@ export interface PollType {
   id: string;
   question: string;
   options: VoteOptionType[];
-  creatorId: string;
+  creator: {
+      id: string;
+  };
   visibility: boolean;
   publishedAt: string;
   validUntil: string;

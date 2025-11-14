@@ -24,6 +24,11 @@ export type PollOptionsType = {
     votes: VoteType[],
 }
 
+export type PollOptionsCreateType = {
+    caption: string,
+    presentationOrder: number,
+}
+
 export type VoteType = {
     id: string,
     publishedAt: string,

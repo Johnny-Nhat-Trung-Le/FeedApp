@@ -1,9 +1,10 @@
 import {type SubmitHandler, useForm, useFieldArray} from "react-hook-form";
-import type {PollType, VoteOptionType} from "../../interfaces/interfaces.ts";
+import type {PollType, VoteOptionType} from "../../../interfaces/Interfaces.ts";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import {useContext} from "react";
 import {UserDataContext} from "../../../context/Context.tsx";
+import type {PollOptionsCreateType} from "../../../interfaces/Types.tsx";
 
 export default function CreatePoll({onClose} : {onClose: () => void}) {
   const minDate = new Date().toISOString().slice(0,16);
@@ -66,7 +67,7 @@ export default function CreatePoll({onClose} : {onClose: () => void}) {
   const onSubmit: SubmitHandler<PollType> = (formData) => {
       // correct the presentationOrder based on the index to avoid duplicated values
       let correctVoteOptions: VoteOptionType[] = []
-      formData.options.forEach((voteOption, index) => {
+      formData.options.forEach((voteOption: PollOptionsCreateType, index:number) => {
           let option = {
               caption: voteOption.caption,
               presentationOrder: index
@@ -82,7 +83,6 @@ export default function CreatePoll({onClose} : {onClose: () => void}) {
           creator: { id: userData.id },
           publishedAt: new Date().toISOString(),
           validUntil: convertValidUntil
-
       }
       console.log(createRequest);
       mutation.mutate(createRequest);
@@ -100,7 +100,7 @@ export default function CreatePoll({onClose} : {onClose: () => void}) {
                   <div className="flex flex-col gap-1">
                       <label className={"font-semibold"}>Question</label>
                       <input {...register("question", {required: true})} className={"bg-white border border-gray-300 rounded-md px-2 py-1"} />
-                      {errors.question && (<span className={"text-red-500 text-sm"}>This field is required</span>)}
+                      {errors.question && (<span className={"text-red-500 text-sm mt-2"}>Question is required</span>)}
                   </div>
                   <div className="flex flex-col gap-1">
                        <label className={"font-semibold"}> Valid Until </label>
@@ -108,7 +108,7 @@ export default function CreatePoll({onClose} : {onClose: () => void}) {
                        className={"bg-white border border-gray-300 rounded-md px-2 py-1"}
                         type="datetime-local"
                         min={minDate} />
-                       {errors.validUntil && (<span className={"text-red-500 text-sm"}>This field is required</span>)}
+                       {errors.validUntil && (<span className={"text-red-500 text-sm mt-2"}>Valid until date is required</span>)}
                   </div>
 
                   {fields.map((_, index) => (
