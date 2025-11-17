@@ -87,7 +87,7 @@ export default function CreatePoll({onClose} : {onClose: () => void}) {
       mutation.mutate(createRequest);
   };
 
-  return <div className={"fixed inset-0"}>
+  return <div className={"fixed inset-0 z-[10]"}>
       <div className="absolute inset-0 bg-black opacity-50">
       </div>
       <div className={"p-10 bg-white max-w-sm mx-auto relative top-1/8 max-h-[80vh] overflow-auto rounded-lg"}>

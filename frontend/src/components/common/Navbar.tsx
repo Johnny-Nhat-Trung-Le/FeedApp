@@ -1,10 +1,17 @@
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {useContext, useState} from "react";
 import {UserDataContext} from "../../context/Context.tsx";
 
 export default function Navbar() {
     const {userData, setUserData} = useContext(UserDataContext);
     const [openUserMenu, setOpenUserMenu] = useState(false);
+
+    const navigate = useNavigate();
+
+    function handleLogout() {
+        setUserData({token:"", username: "", id: ""});
+        navigate(`/`);
+    }
 
     return <nav aria-label="main navigation" className={"sticky top-0 pt-3 flex items-center justify-between"}>
         <div>
@@ -43,7 +50,7 @@ export default function Navbar() {
                                 Profile
                             </NavLink>
                         </li>
-                        <li className={"hover:text-red-500"} onClick={()=> setUserData({token:"", id: ""})}>
+                        <li className={"hover:text-red-500"} onClick={()=> handleLogout()}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="size-6 logout-btn">
                                 <path fillRule="evenodd" d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6ZM5.78 8.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 0 0 0 1.06l3 3a.75.75 0 0 0 1.06-1.06l-1.72-1.72H15a.75.75 0 0 0 0-1.5H4.06l1.72-1.72a.75.75 0 0 0 0-1.06Z" clipRule="evenodd" />
                             </svg>
