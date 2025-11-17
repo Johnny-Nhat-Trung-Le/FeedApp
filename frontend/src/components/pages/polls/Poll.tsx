@@ -63,7 +63,8 @@ export default function Poll({poll} : {poll:PollType}) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({predicate: (query) => {
-                return ['polls','userData'].includes(query.queryKey[0]);
+                const key = query.queryKey[0] as string;
+                return ['polls','userData'].includes(key);
             }});
         }
     })
