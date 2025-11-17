@@ -28,7 +28,7 @@ export default function Login() {
         },
         onSuccess:  (response) => {
             console.log(response);
-            setUserData({token: response.data.token, id: response.data.userId})
+            setUserData({token: response.data.token, username: response.data.username, id: response.data.userId})
             navigate(`/users`);
         }
     })

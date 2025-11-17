@@ -2,6 +2,7 @@ import type {Dispatch, SetStateAction} from "react";
 
 export interface UserContext {
     token: string;
+    username: string;
     id: string;
 }
 

@@ -12,4 +12,5 @@ import java.util.UUID;
 public class LoginResponseDTO {
     private String token;
     private UUID userId;
+    private String username;
 }

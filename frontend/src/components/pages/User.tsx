@@ -25,8 +25,14 @@ export default function User(){
         return [];
     }, [pollResults]);
 
+    console.log(userData);
+
     return <Container>
-        <section className={"border-b pb-5 pt-10"}>
+        <section className={"border-b py-5"}>
+            <div className={"flex mb-5 gap-3 items-center"}>
+                <img src={"/avatar-img.jpg"} alt={"user avatar"} className={"max-w-30"}/>
+                <h1 className={"capitalize"}>{userData.username}</h1>
+            </div>
             <ul className={"flex items-center gap-4"}>
                 <li>All</li>
                 <li>

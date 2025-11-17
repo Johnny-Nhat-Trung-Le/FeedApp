@@ -5,6 +5,7 @@ import type {UserContext} from "../interfaces/Interfaces.ts";
 export default function AuthProvider({children}: {children: ReactNode}) {
     const [userData, setUserData] = useState<UserContext>({
         token: "",
+        username: "",
         id: ""
     });
 

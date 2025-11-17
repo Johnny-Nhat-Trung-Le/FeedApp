@@ -33,6 +33,7 @@ public class AccessController {
             LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
                     .token(sessionToken)
                     .userId(userId)
+                    .username(user)
                     .build();
             return ResponseEntity.ok(loginResponseDTO);
         }
