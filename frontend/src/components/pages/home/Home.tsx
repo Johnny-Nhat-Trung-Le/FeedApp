@@ -1,8 +1,7 @@
 import Button from "../../common/utils/Button.tsx";
 import GetStarted from "./GetStarted.tsx";
 import Container from "../../common/utils/Container.tsx";
-import LatestPolls from "../polls/LatestPolls.tsx";
-import Carousel from "../../common/utils/Carousel.tsx";
+import Carousel from "../polls/Carousel.tsx";
 export default function Home() {
     return <>
         <Container>
@@ -23,14 +22,8 @@ export default function Home() {
                 <div className={"text-center"}>
                     <h2 className={"mb-5 font-bold inline-block border-b"}>Latest polls</h2>
                 </div>
-                <LatestPolls />
+                <Carousel />
             </Container>
-        </section>
-        <section>
-        <Container>
-        <h2>TESTER</h2>
-        <Carousel />
-        </Container>
         </section>
     </>
 }

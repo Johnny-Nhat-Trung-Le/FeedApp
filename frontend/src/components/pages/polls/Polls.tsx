@@ -3,7 +3,7 @@ import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import type {PollType} from "../../../interfaces/Types.tsx";
 import Poll from "./Poll.tsx";
-import LatestPolls from "./LatestPolls.tsx";
+import Carousel from "./Carousel.tsx";
 
 export default function Polls() {
     const {data : pollResults} = useQuery({
@@ -16,8 +16,10 @@ export default function Polls() {
     return <>
         <section className={"py-10 mt-10 bg-light-pink/18"}>
             <Container>
-                <h2 className={"mb-5 font-bold"}>Latest polls</h2>
-                <LatestPolls />
+                <div className={"text-center"}>
+                    <h2 className={"mb-5 font-bold inline-block border-b text-center"}>Latest polls</h2>
+                </div>
+                <Carousel/>
             </Container>
         </section>
         <section className={"py-10 mb-10"}>
