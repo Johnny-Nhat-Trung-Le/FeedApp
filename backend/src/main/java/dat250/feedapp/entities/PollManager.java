@@ -78,7 +78,7 @@ public class PollManager {
                 .question(poll.getQuestion())
                 .publishedAt(poll.getPublishedAt())
                 .validUntil(poll.getValidUntil())
-                .creator(poll.getCreator().getUsername())
+                .creator(poll.getCreator().getId().toString())
                 .options(poll.getOptions())
                 .build();
 

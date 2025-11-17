@@ -109,7 +109,7 @@ export default function Poll({poll} : {poll:PollType}) {
         getVotes();
     }, [poll])
 
-    return <article className={"py-5 px-8 bg-white max-w-xs min-w-2xs flex flex-col justify-center items-center gap-5 shadow-lg rounded-sm"}>
+    return <article className={"py-5 px-8 bg-white max-w-2xs min-w-2xs h-full flex flex-col justify-center items-center gap-5 shadow-lg rounded-sm"}>
         <h3 className={"font-bold text-center capitalize"}>{poll.question}</h3>
         <ul className={"flex flex-col gap-3 w-full max-h-33 overflow-y-auto"}>
             {voteOptions.map((option: PollOptionsType) => (
