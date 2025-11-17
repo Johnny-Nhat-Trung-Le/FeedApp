@@ -2,7 +2,7 @@ import Button from "../../common/utils/Button.tsx";
 import GetStarted from "./GetStarted.tsx";
 import Container from "../../common/utils/Container.tsx";
 import LatestPolls from "../polls/LatestPolls.tsx";
-
+import Carousel from "../../common/utils/Carousel.tsx";
 export default function Home() {
     return <>
         <Container>
@@ -25,6 +25,12 @@ export default function Home() {
                 </div>
                 <LatestPolls />
             </Container>
+        </section>
+        <section>
+        <Container>
+        <h2>TESTER</h2>
+        <Carousel />
+        </Container>
         </section>
     </>
 }
