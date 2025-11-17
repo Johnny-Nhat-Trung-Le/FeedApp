@@ -143,7 +143,6 @@ public class PollManager {
             voteRepository.save(vote);
             pollEventPublisher.publishVote(pollId, vote);
             return vote;
-
         }
         return null;
     }
