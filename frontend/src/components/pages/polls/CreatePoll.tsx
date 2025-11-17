@@ -84,7 +84,6 @@ export default function CreatePoll({onClose} : {onClose: () => void}) {
           publishedAt: new Date().toISOString(),
           validUntil: convertValidUntil
       }
-      console.log(createRequest);
       mutation.mutate(createRequest);
   };
 

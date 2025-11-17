@@ -52,6 +52,22 @@ export default function Poll({poll} : {poll:PollType}) {
         }
     })
 
+    const deleteMutation = useMutation({
+        mutationFn: () => {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${userData.token}`
+                }
+            }
+            return axios.delete(`http://localhost:8080/api/v1/polls/${poll.id}`, config);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({predicate: (query) => {
+                return ['polls','userData'].includes(query.queryKey[0]);
+            }});
+        }
+    })
+
     function getVotes():void{
         let totalVotes: number = 0;
         let votesMap: Map<string, number> = new Map();
@@ -104,12 +120,16 @@ export default function Poll({poll} : {poll:PollType}) {
         }
     }
 
+    function handleDeletePoll(){
+        deleteMutation.mutate();
+    }
+
     // everytime someone has voted we want to update the results
     useEffect(() => {
         getVotes();
     }, [poll])
 
-    return <article className={"py-5 px-8 bg-white max-w-2xs min-w-2xs h-full flex flex-col justify-center items-center gap-5 shadow-lg rounded-sm"}>
+    return <article className={"relative py-5 px-8 bg-white max-w-2xs min-w-2xs h-full flex flex-col justify-center items-center gap-5 shadow-lg rounded-sm"}>
         <h3 className={"font-bold text-center capitalize"}>{poll.question}</h3>
         <ul className={"flex flex-col gap-3 w-full max-h-33 overflow-y-auto"}>
             {voteOptions.map((option: PollOptionsType) => (
@@ -121,5 +141,8 @@ export default function Poll({poll} : {poll:PollType}) {
         </ul>
         <p className={"self-start text-sm pl-2"}>{totalVotes} votes</p>
         <button disabled={selectedOption === null} onClick={() => handleVoteSubmit()} className={`py-2 px-6 rounded-sm text-sm text-white ${selectedOption === null ? disabledStyle : normalStyle}`}>Vote</button>
+        {userData.id === poll.creator &&
+            <button className={"absolute bottom-2 right-2 text-red-500"} onClick={() => handleDeletePoll()}>Delete</button>
+        }
     </article>
 }

@@ -25,8 +25,6 @@ export default function User(){
         return [];
     }, [pollResults]);
 
-    console.log(userData);
-
     return <Container>
         <section className={"border-b py-5"}>
             <div className={"flex mb-5 gap-3 items-center"}>

@@ -27,7 +27,6 @@ export default function Login() {
             return axios.post("http://localhost:8080/api/v1/login", userData);
         },
         onSuccess:  (response) => {
-            console.log(response);
             setUserData({token: response.data.token, username: response.data.username, id: response.data.userId})
             navigate(`/users`);
         }
