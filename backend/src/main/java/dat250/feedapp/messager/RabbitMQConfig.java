@@ -16,7 +16,12 @@ public class RabbitMQConfig {
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("localhost");
+        String rabbitMqHost = System.getenv("SPRING_RABBITMQ_HOST");
+        //Default
+        if (rabbitMqHost == null) {
+            rabbitMqHost = "localhost";
+        }
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitMqHost);
         connectionFactory.setUsername("guest");
         connectionFactory.setPassword("guest");
         connectionFactory.setPort(5672);
