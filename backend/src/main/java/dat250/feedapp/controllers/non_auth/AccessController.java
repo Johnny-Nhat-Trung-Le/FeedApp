@@ -1,5 +1,6 @@
 package dat250.feedapp.controllers.non_auth;
 
+import dat250.feedapp.dto.LoginResponseDTO;
 import dat250.feedapp.dto.UserAuthDTO;
 import dat250.feedapp.dto.UserDTO;
 import dat250.feedapp.entities.PollManager;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -21,13 +23,19 @@ public class AccessController {
     private PollManager pollManager;
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody UserAuthDTO userAuthDTO) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody UserAuthDTO userAuthDTO) {
         String user = userAuthDTO.getUsername();
         String password = userAuthDTO.getPassword();
         String sessionToken = this.pollManager.login(user, password);
-        if (sessionToken != null) {
+        UUID userId = this.pollManager.getUserId(user);
 
-            return ResponseEntity.ok(sessionToken);
+        if (sessionToken != null) {
+            LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
+                    .token(sessionToken)
+                    .userId(userId)
+                    .username(user)
+                    .build();
+            return ResponseEntity.ok(loginResponseDTO);
         }
         //will never occur if there is bad request, since authentication manager throws 401 response code
         return ResponseEntity.badRequest().build();
@@ -42,7 +50,7 @@ public class AccessController {
         if (createdUser != null) {
             UserDTO userDTO = UserDTO.builder().username(createdUser.getUsername()).email(createdUser.getEmail()).build();
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdUser.getId()).toUri();
-            //TODO remove after debug
+            //remove after debug
             System.out.println(createdUser.getId());
             return ResponseEntity.created(location).body(userDTO);
         }

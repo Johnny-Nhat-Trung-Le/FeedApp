@@ -4,7 +4,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {loginSchema} from "../validation/Schema.tsx";
 import Container from "../common/utils/Container.tsx";
 import {useContext} from "react";
-import {UserTokenContext} from "../../context/Context.tsx";
+import {UserDataContext} from "../../context/Context.tsx";
 import type {LoginType} from "../../interfaces/Types.tsx";
 import {useMutation} from "@tanstack/react-query";
 import axios from "axios";
@@ -18,17 +18,16 @@ export default function Login() {
         resolver: yupResolver(loginSchema),
     });
 
-    const {setUserToken} = useContext(UserTokenContext);
+    const {setUserData} = useContext(UserDataContext);
 
     const navigate = useNavigate();
 
     const mutation = useMutation({
         mutationFn: (userData: LoginType) => {
-            return axios.post("http://localhost:8080/api/v1/auth/login", userData);
+            return axios.post("http://localhost:8080/api/v1/login", userData);
         },
         onSuccess:  (response) => {
-            console.log(response);
-            setUserToken({token: response.data})
+            setUserData({token: response.data.token, username: response.data.username, id: response.data.userId})
             navigate(`/users`);
         }
     })

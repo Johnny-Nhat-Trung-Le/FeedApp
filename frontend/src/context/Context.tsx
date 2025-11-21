@@ -1,9 +1,11 @@
 import {createContext} from "react";
-import type { UserTokenInterface} from "../interfaces/Interfaces.ts";
+import type { UserDataInterface} from "../interfaces/Interfaces.ts";
 
-export const UserTokenContext = createContext<UserTokenInterface>({
-    userToken: {
+export const UserDataContext = createContext<UserDataInterface>({
+    userData: {
         token: "",
+        username: "",
+        id: "",
     },
-    setUserToken: () => {},
+    setUserData: () => {},
 })

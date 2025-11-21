@@ -33,6 +33,7 @@ public class User implements UserDetails, CredentialsContainer {
     @org.springframework.data.neo4j.core.schema.Id
     private UUID id;
 
+    @Column(unique = true)
     @NotNull
     @Size(min = 3)
     private String username;

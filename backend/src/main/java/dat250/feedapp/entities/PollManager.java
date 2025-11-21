@@ -20,8 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,22 +30,31 @@ public class PollManager {
     private final UUID anonymousID = UUID.fromString("08696b10-34b0-4741-812a-b261947c3a16");
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private PollRepository pollRepository;
+
     @Autowired
     private VoteRepository voteRepository;
+
     @Autowired
     private VoteOptionRepository voteOptionRepository;
+
     @Autowired
     private AuthenticationManager authManager;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private JWTService jwtService;
+
     @Autowired
     private PollBrokerManager pollBrokerManager;
+
     @Autowired
     private PollEventListener pollEventListener;
+
     @Autowired
     private PollEventPublisher pollEventPublisher;
 
@@ -81,7 +88,7 @@ public class PollManager {
                 .question(poll.getQuestion())
                 .publishedAt(poll.getPublishedAt())
                 .validUntil(poll.getValidUntil())
-                .creator(poll.getCreator().getUsername())
+                .creator(poll.getCreator().getId().toString())
                 .options(poll.getOptions())
                 .build();
 
@@ -166,7 +173,6 @@ public class PollManager {
     }
 
     public String login(String username, String password) {
-
         //Specify what type of authentication token we want to use
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 username,
@@ -191,9 +197,6 @@ public class PollManager {
         Set<VoteOption> set = poll.getOptions();
         for (VoteOption vo : set) {
             int count = getNeoVoteCount(vo.getId()).intValue();
-//            System.out.println(neoTempRepository.getVoteCountById(vo.getId()));
-//            int count = 0;
-            System.out.println("This is the count: " + count);
             if (count > 0) {
                 System.out.println("THIS IS CACHE");
                 VoteOptionDTO dto = VoteOptionDTO.builder()
@@ -216,5 +219,13 @@ public class PollManager {
 
     private Long getNeoVoteCount(UUID id) {
         return voteService.getVoteCountByVoteOptionId(id);
+    }
+
+    public UUID getUserId(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user != null) {
+            return user.getId();
+        }
+        return null;
     }
 }

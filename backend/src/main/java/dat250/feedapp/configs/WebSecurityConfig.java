@@ -40,6 +40,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
         return security
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/admin/**").hasAnyAuthority(Roles.ADMIN.getAuthority())
                         .requestMatchers("/api/v1/register").permitAll()
