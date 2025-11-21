@@ -12,7 +12,7 @@ export default function Home() {
                     <Button url={"/register"} title={"Get started"}
                             style={"bg-primary text-white border hover:bg-white hover:text-primary hover:border-primary"}/>
                 </div>
-                <img src={"/src/assets/header-img.jpg"} alt="hands voting on different numbers"
+                <img src={"/header-img.jpg"} alt="hands voting on different numbers"
                      className={"absolute top-15 right-0 max-w-2xl"}/>
             </header>
         </Container>

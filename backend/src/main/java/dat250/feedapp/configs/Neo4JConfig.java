@@ -21,8 +21,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class Neo4JConfig {
     @Bean
     public Driver neo4jDriver() {
-        return GraphDatabase.driver("bolt://localhost:7687",
-                AuthTokens.basic("neo4j", "neo4j123"));
+        //use "bolt://localhost:7687" if not running in docker compose
+        return GraphDatabase.driver("bolt://neo4j:7687",
+                AuthTokens.basic("neo4j", "password"));
     }
 
     @Bean

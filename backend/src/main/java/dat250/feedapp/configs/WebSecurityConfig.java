@@ -28,7 +28,6 @@ import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class WebSecurityConfig {
 
 
@@ -40,16 +39,13 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
         return security
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> {})
+                .cors(cors -> {
+                })
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/admin/**").hasAnyAuthority(Roles.ADMIN.getAuthority())
-                        .requestMatchers("/api/v1/register").permitAll()
-                        .requestMatchers("/api/v1/login").permitAll()
-                        .requestMatchers("/api/v1/public/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/v1/polls/**").authenticated()
+                        .anyRequest().permitAll())
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
